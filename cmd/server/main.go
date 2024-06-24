@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	routers "github.com/LeVanHieu0509/backend-go"
+	"github.com/LeVanHieu0509/backend-go/internal/routers"
 )
 
 func main() {
