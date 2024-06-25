@@ -13,7 +13,7 @@ func NewsRouter() *gin.Engine {
 	v1 := r.Group("v1/2024")
 	{
 		v1.GET("/ping", Pong)
-		v1.PUT("/user", c.NewUserController().GetUserById)
+		v1.GET("/user/1", c.NewUserController().GetUserById)
 		v1.PATCH("/ping", Pong)
 		v1.DELETE("/ping", Pong)
 		v1.HEAD("/ping", Pong)

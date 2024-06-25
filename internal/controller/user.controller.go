@@ -2,9 +2,9 @@ package controller
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/LeVanHieu0509/backend-go/internal/service"
+	"github.com/LeVanHieu0509/backend-go/pkg/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,7 +24,6 @@ func NewUserController() *UserController {
 func (uc *UserController) GetUserById(ctx *gin.Context) {
 	a := uc.userService.GetInfoUser()
 	fmt.Println(a)
-	ctx.JSON(http.StatusOK, gin.H{
-		"ok": 1,
-	})
+
+	response.SuccessResponse(ctx, 20001, []string{"ok"})
 }
