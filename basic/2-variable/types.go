@@ -133,6 +133,7 @@ func main() {
 	functionInit()
 	fmt.Println("--------------------interface----------------------")
 	interfaceInit()
+	interfaceExample()
 
 }
 
@@ -304,6 +305,20 @@ func structInit() {
 	//Initializing only some fields. Other values are initialized to default zero value of that type
 	employee3 := employee{name: "Tina", age: 24}
 	fmt.Println(employee3)
+
+	// In ra kích thước của struct employee3
+	fmt.Printf("Kích thước của struct employee3: %d bytes\n", unsafe.Sizeof(employee3))
+
+	// In ra địa chỉ của từng trường trong struct
+	fmt.Printf("Địa chỉ của trường Name: %p\n", &employee3.name)
+	fmt.Printf("Địa chỉ của trường Age: %p\n", &employee3.age)
+
+	/*
+
+		Struct có vùng nhớ riêng: Khi bạn khai báo và khởi tạo một struct, bộ nhớ sẽ được cấp phát để lưu trữ các trường của struct.
+		Kích thước của struct: Phụ thuộc vào các trường mà struct đó chứa.
+		Địa chỉ của các trường: Mỗi trường trong struct có địa chỉ bộ nhớ riêng, và bạn có thể lấy địa chỉ này bằng cách sử dụng toán tử &.
+	*/
 
 }
 
@@ -522,4 +537,68 @@ func interfaceInit() {
 		4, Truy xuất phương thức qua interface: Sau khi gán giá trị,
 		bạn có thể gọi các phương thức của interface trên giá trị đó.
 	*/
+}
+
+// example về interface
+type Movement interface {
+	up()
+}
+
+type Animal interface {
+	speak()
+}
+
+// Embed Interface
+type NextAnimal interface {
+	Movement
+	Animal
+}
+
+// Empty Interface: default trong go là kiểu này
+type EmptyAnimal interface {
+}
+
+type Dog struct {
+}
+
+func (d Dog) speak() {
+	fmt.Print("DOG\n")
+}
+func (d Dog) up() {
+	fmt.Print("DOG RUN UP\n")
+}
+
+// Giống kiểu any trong typescript
+func goOut(i interface{}) {
+	fmt.Println(i)
+}
+
+type Cat struct {
+}
+
+func interfaceExample() {
+	// Single Interface
+
+	// var animal Animal
+	// animal = Dog{}
+	// animal.speak()
+
+	//Multi Interface
+	// dog := Dog{}
+
+	// var m Movement = dog
+	// m.up()
+	// var a Animal = dog
+	// a.speak()
+
+	// Embed Interface (extend interface)
+	dog := Dog{}
+
+	var n NextAnimal = dog
+	n.up()
+	n.speak()
+
+	// Empty Interface
+	goOut(10)
+
 }
