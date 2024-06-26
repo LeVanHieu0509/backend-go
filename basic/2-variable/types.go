@@ -576,6 +576,14 @@ func goOut(i interface{}) {
 type Cat struct {
 }
 
+func (d Cat) speak() {
+	fmt.Print("CAT\n")
+}
+
+func (d Cat) up() {
+	fmt.Print("CAT UP\n")
+}
+
 func interfaceExample() {
 	// Single Interface
 
@@ -593,12 +601,16 @@ func interfaceExample() {
 
 	// Embed Interface (extend interface)
 	dog := Dog{}
+	cat := Cat{}
 
 	var n NextAnimal = dog
 	n.up()
 	n.speak()
 
+	var c Cat = cat
+	c.speak()
+	c.up()
+
 	// Empty Interface
 	goOut(10)
-
 }
