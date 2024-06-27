@@ -511,18 +511,26 @@ type square struct {
 
 // Định nghĩa một phương thức có tên area cho kiểu square.
 // (s *square): Đây là phương thức của kiểu square, với s là một con trỏ tới square.
+
 func (s *square) area() int {
 	return s.side * s.side //Phương thức area trả về diện tích của hình vuông
 }
 
 func interfaceInit() {
+	/*
+	   Sử dụng con trỏ thường hiệu quả hơn về mặt bộ nhớ, đặc biệt khi làm việc với các struct lớn.
+	   Bằng cách sử dụng con trỏ, bạn tránh được việc sao chép toàn bộ struct mỗi khi truyền nó xung quanh.
+	*/
 
 	// Khai báo một biến s kiểu shape. Lúc này, s chưa được gán giá trị nào.
+	// khi gán một giá trị cho một biến interface, giá trị đó phải thỏa mãn tất cả các phương thức được định nghĩa trong interface
 	var s shape
 
 	// 1, Khởi tạo một giá trị square với side bằng 4 và lấy địa chỉ của nó (tạo một con trỏ tới square).
 	// 2, Gán giá trị con trỏ square này cho biến s. Bởi vì square thực hiện interface shape
 	// (vì nó có phương thức area), việc gán này hợp lệ.
+
+	// chỉ có con trỏ đến một square mới có thể gọi phương thức area.
 	s = &square{side: 4}
 
 	// Gọi phương thức area của đối tượng square thông qua interface shape.
@@ -559,13 +567,17 @@ type EmptyAnimal interface {
 }
 
 type Dog struct {
+	color   string
+	age     uint
+	typeDog string
 }
 
-func (d Dog) speak() {
-	fmt.Print("DOG\n")
+func (d *Dog) speak() {
+	fmt.Printf("DOG: %v \n", d)
 }
-func (d Dog) up() {
-	fmt.Print("DOG RUN UP\n")
+func (d *Dog) up() {
+
+	fmt.Printf("DOG RUN UP: %v \n", d)
 }
 
 // Giống kiểu any trong typescript
@@ -585,6 +597,9 @@ func (d Cat) up() {
 }
 
 func interfaceExample() {
+	// Sử dụng & trong interface: sử dụng trong các trường hợp cần truyền tham chiếu để tránh sao chép
+	// nhiều dữ liệu hoặc cần thay đổi nội dung của struct.
+
 	// Single Interface
 
 	// var animal Animal
@@ -600,7 +615,12 @@ func interfaceExample() {
 	// a.speak()
 
 	// Embed Interface (extend interface)
-	dog := Dog{}
+	dog := &Dog{
+		color:   "blu",
+		age:     18,
+		typeDog: "Viet",
+	}
+
 	cat := Cat{}
 
 	var n NextAnimal = dog
