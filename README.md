@@ -19,3 +19,8 @@ Note:
 go run cmd/cli/main.log.go
 
 ## Tương tác File trong Go bằng Thư viện OS
+
+## TEST: Phải chạy 2 lệnh này thì mới test được độ bao phủ của test case user đã viết
+
+- go test -coverprofile=coverage.out
+- go tool cover -html=coverage.out -o coverage.html (Check được độ bao phủ của test đi vào từng hàm đã đủ độ bao phủ hay chưa?)
