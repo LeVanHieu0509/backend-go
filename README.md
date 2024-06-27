@@ -1,8 +1,12 @@
 # backend-go
 
-## Go (3): GIN vs ROUTER
+## LIBRARY
 
-- go get -u github.com/gin-gonic/gin
+1. viper: go get github.com/spf13/viper
+2. gin: go get -u github.com/gin-gonic/gin
+3. logger: go get -u go.uber.org/zap
+
+## Go (3): GIN vs ROUTER
 
 run server: go run cmd/server/main.go
 

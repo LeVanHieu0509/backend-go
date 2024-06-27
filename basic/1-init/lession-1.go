@@ -26,6 +26,7 @@ import (
 	3. %t in ra kiểu boolean
 	4. %f in ra dấu thập phân nhưng không có số mũ, ví dụ: 123,456 = 3f
 	5. %c in ra ký tự tương ứng với giá trị byte.
+	6. %w giữ nguyên chuỗi lỗi để gỡ lỗi
 */
 // A comment for human readers
 // main is the function where it all begins.

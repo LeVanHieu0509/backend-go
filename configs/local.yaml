@@ -1,0 +1,22 @@
+server:
+  port: 8001
+databases:
+  - user: admin
+    password: admin
+    host: localhost
+    dbName: shopDEV
+  - user: admin
+    password: admin
+    host: localhost
+    dbName: shopDEV
+security:
+  jwt:
+    key: abc123
+redis:
+  user: admin
+elasticsearch:
+  user: admin
+rabbitMQ:
+  user: admin
+kafka:
+  user: admin
