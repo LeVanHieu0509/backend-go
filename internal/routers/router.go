@@ -1,14 +1,39 @@
 package routers
 
 import (
+	"fmt"
 	"net/http"
 
 	c "github.com/LeVanHieu0509/backend-go/internal/controller"
+	"github.com/LeVanHieu0509/backend-go/internal/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
+func AA() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		fmt.Println("Before --> AA")
+		ctx.Next()
+		fmt.Println("Alter --> AA")
+	}
+}
+
+func BB() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		fmt.Println("Before --> BB")
+		ctx.Next()
+		fmt.Println("Alter --> BB")
+	}
+}
+
+func CC(ctx *gin.Context) {
+	fmt.Println("Before --> CC")
+	ctx.Next()
+	fmt.Println("Alter --> CC")
+}
+
 func NewsRouter() *gin.Engine {
 	r := gin.Default() //func để tạo instance mặc định
+	r.Use(middlewares.AuthMiddleware(), AA(), BB(), CC)
 
 	v1 := r.Group("v1/2024")
 	{
@@ -40,7 +65,7 @@ func Pong(ctx *gin.Context) { //ctx: xử lý request và response
 	name := ctx.Param("name")
 	age := ctx.DefaultQuery("age", "hieu") // If age not has, set age -> hieu
 	uid := ctx.Query("uid")                //default
-
+	fmt.Printf("My HANDLE\n")
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "pong" + name,
 		"uid":     uid,
