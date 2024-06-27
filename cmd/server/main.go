@@ -1,15 +1,8 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/LeVanHieu0509/backend-go/internal/routers"
-)
+import "github.com/LeVanHieu0509/backend-go/internal/initialize"
 
 func main() {
-	fmt.Println("Startin")
 
-	r := routers.NewsRouter()
-
-	r.Run(":8001")
+	initialize.Run()
 }

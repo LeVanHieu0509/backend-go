@@ -5,6 +5,7 @@
 1. viper: go get github.com/spf13/viper
 2. gin: go get -u github.com/gin-gonic/gin
 3. logger: go get -u go.uber.org/zap
+4. logger advance: go get github.com/natefinch/lumberjack
 
 ## Go (3): GIN vs ROUTER
 

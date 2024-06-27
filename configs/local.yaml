@@ -1,5 +1,21 @@
 server:
   port: 8001
+mysql:
+  host: 127.0.0.1
+  port: 33306
+  username: tipjs
+  password: tipjs
+  dbname: shopGo
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifetime: 3600
+logger:
+  log_level: debug
+  file_log_name: "./storages/logs/dev.xxx.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
 databases:
   - user: admin
     password: admin
