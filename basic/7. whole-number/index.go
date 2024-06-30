@@ -18,7 +18,7 @@ func main() {
 	fmt.Printf("Type %T for %v\n", year, year)
 
 	days := 365.2425                        // Prints Type float64
-	fmt.Printf("Type %T for %[1]v\n", days) // Thay vì lặp lại biến hai lần,sài [1] cho động từ định dạng thứ hai.
+	fmt.Printf("Type %T for %[1]v\n", days) // Thay vì lặp lại biến hai lần, sài [1] cho động từ định dạng thứ hai.
 
 	// Nếu có nhiều màu cần lưu trữ tuần tự, chẳng hạn như trong ảnh không nén,
 	// Bạn có thể tiết kiệm bộ nhớ đáng kể bằng cách sử dụng số nguyên 8 bit.

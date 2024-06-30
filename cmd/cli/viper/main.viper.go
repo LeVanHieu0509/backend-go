@@ -31,7 +31,7 @@ func main() {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		//%w giữ nguyên chuỗi lỗi để gỡ lỗi
+		//%w giữ nguyên chuỗi lỗi để gỡ lỗis
 		panic(fmt.Errorf("failed to read configuration: %w", err))
 	}
 

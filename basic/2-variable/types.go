@@ -140,6 +140,7 @@ func main() {
 type sample struct {
 	a int
 	b string
+	c string
 }
 
 // uintptrFc
@@ -147,13 +148,22 @@ type sample struct {
 // Khi bạn muốn lưu giá trị địa chỉ con trỏ để in hoặc lưu trữ nó
 
 func uintptrFc() {
-	s := &sample{a: 1, b: "test"}
+	s := &sample{a: 1, b: "test", c: "ok"}
 
-	//Getting the address of field b in struct s
+	// Getting the address of field b in struct s
+	// unsafe.Pointer(s): Chuyển con trỏ của s thành kiểu unsafe.Pointer.
+	// uintptr(unsafe.Pointer(s)): Chuyển đổi unsafe.Pointer thành uintptr, một kiểu số nguyên không dấu đủ lớn để chứa một con trỏ.
+	// unsafe.Offsetof(s.b): Lấy offset của trường b trong cấu trúc s.
+	// uintptr(unsafe.Pointer(s)) + unsafe.Offsetof(s.b): Tính toán địa chỉ của trường b bằng cách thêm offset của b vào địa chỉ của s
+	// unsafe.Pointer(...): Chuyển đổi lại từ uintptr thành unsafe.Pointer
+
 	p := unsafe.Pointer(uintptr(unsafe.Pointer(s)) + unsafe.Offsetof(s.b))
 
 	//Typecasting it to a string pointer and printing the value of it
-	fmt.Println(*(*string)(p))
+	// (*string)(p): Ép kiểu unsafe.Pointer thành con trỏ kiểu string.
+	// *(*string)(p): Truy xuất giá trị của con trỏ kiểu string.
+	// Chỉ in ra được giá trị của string đầu tiên.
+	fmt.Println(*(*string)(p)) //fmt.Println(...): In giá trị ra màn hình.
 }
 
 func float() {

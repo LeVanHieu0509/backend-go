@@ -1,1 +1,5 @@
 {"level":"INFO","time":"2024-06-27T17:00:49.474+0700","caller":"initialize/router.go:71","msg":"Application started, trace-id"}
+{"level":"INFO","time":"2024-06-27T17:21:03.521+0700","caller":"initialize/router.go:71","msg":"Application started, trace-id"}
+{"level":"INFO","time":"2024-06-27T17:21:16.551+0700","caller":"initialize/router.go:71","msg":"Application started, trace-id"}
+{"level":"INFO","time":"2024-06-27T17:21:35.321+0700","caller":"initialize/router.go:71","msg":"Application started, trace-id"}
+{"level":"INFO","time":"2024-06-27T17:21:41.461+0700","caller":"initialize/router.go:71","msg":"Application started, trace-id"}

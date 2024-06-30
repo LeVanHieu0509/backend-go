@@ -27,6 +27,7 @@ func main() {
 	shortSwitch()
 }
 
+// Cách viết if else rút gọn cấu trúc
 func shortIf() {
 	if num := rand.Intn(3); num == 0 {
 		fmt.Println("Space Adventures")
@@ -38,6 +39,8 @@ func shortIf() {
 
 	// fmt.Print(num) //dùng câu lệnh này sẽ ko get được vì num có scope ở trong hàm if thôi
 }
+
+// Cách viết switch rút gọn cấu trúc
 func shortSwitch() {
 	switch num := rand.Intn(10); num {
 	case 0:

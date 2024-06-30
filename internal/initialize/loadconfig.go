@@ -8,6 +8,7 @@ import (
 )
 
 func LoadConfig() {
+	// Load từ file yaml ra giống như yaml là file env
 	viper := viper.New()
 	viper.AddConfigPath("./configs")
 	viper.SetConfigName("local")

@@ -21,12 +21,39 @@ import (
 	maps:               map[key1:value1 key2:value2 ...]
 	pointer to above:   &{}, &[], &map[]
 
-	1. %v giá trị ở định dạng mặc định
-	2. %T in ra kiểu dữ liệu là gì
-	3. %t in ra kiểu boolean
-	4. %f in ra dấu thập phân nhưng không có số mũ, ví dụ: 123,456 = 3f
-	5. %c in ra ký tự tương ứng với giá trị byte.
-	6. %w giữ nguyên chuỗi lỗi để gỡ lỗi
+	Advance:
+	1. Chuỗi kí tự
+		%s - String: Định dạng chuỗi (string)
+		%q - Quoted: Định dạng chuỗi với dấu ngoặc kép (double-quoted string)
+		%x - Hexadecimal: Định dạng chuỗi dưới dạng các byte hex (hex bytes)
+		%X - Uppercase Hexadecimal: Định dạng chuỗi dưới dạng các byte hex (hex bytes) với chữ cái viết hoa
+	2. Số Nguyên
+		%d - Decimal: Định dạng số nguyên hệ thập phân (decimal integer)
+		%b - Binary: Định dạng số nguyên dưới dạng nhị phân (binary integer)
+		%c - Character: Định dạng số nguyên dưới dạng ký tự Unicode (Unicode character)
+		%o - Octal: Định dạng số nguyên dưới dạng bát phân (octal integer)
+		%q - Quoted character: Định dạng số nguyên dưới dạng ký tự Unicode (single-quoted character)
+		%x - Hexadecimal: Định dạng số nguyên dưới dạng thập lục phân (hexadecimal integer)
+		%X - Uppercase Hexadecimal: Định dạng số nguyên dưới dạng thập lục phân (hexadecimal integer) với chữ cái viết hoa
+		%U - Unicode: Định dạng số nguyên dưới dạng mã Unicode (Unicode code point)
+	3. Số Thực
+		%f - Floating-point: Định dạng số thực (floating-point) với dấu chấm động (default format)
+		%e - Exponential: Định dạng số thực dưới dạng ký hiệu khoa học (scientific notation, e.g., -1.234456e+78)
+		%E - Uppercase Exponential: Định dạng số thực dưới dạng ký hiệu khoa học (scientific notation) với chữ E viết hoa (e.g., -1.234456E+78)
+		%g - General: Định dạng số thực dưới dạng gọn gàng hơn giữa %e và %f
+		%G - Uppercase General: Định dạng số thực dưới dạng gọn gàng hơn giữa %E và %f
+	4. Boolean
+		%t - Boolean: Định dạng giá trị boolean (true hoặc false)
+
+	5. Con Trỏ và Địa Chỉ
+		%p - Pointer: Định dạng con trỏ (pointer)
+	6. Các Cấu Trúc Dữ Liệu
+		%v - Value: Định dạng giá trị theo cách tiêu chuẩn nhất (default format)
+		%+v -  Detailed Value: Định dạng giá trị bao gồm cả tên trường (field names) cho các cấu trúc (structs)
+		%#v - Go-syntax: Định dạng giá trị theo cách có thể tái sử dụng trong mã Go (Go-syntax format)
+		%T - Type: Định dạng kiểu của giá trị (type of the value)
+	7. Lỗi
+		%w - Wrapped Error: Định dạng lỗi để bọc lỗi trong lỗi khác (error wrapping, sử dụng với fmt.Errorf)
 */
 // A comment for human readers
 // main is the function where it all begins.
