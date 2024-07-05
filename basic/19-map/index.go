@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
-	"sort"
+	s "sort"
 )
 
 func main() {
@@ -99,6 +99,6 @@ func main() {
 	for t := range set {
 		unique = append(unique, t)
 	}
-	sort.Float64s(unique)
+	s.Float64s(unique)
 	fmt.Println(unique)
 }
