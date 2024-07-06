@@ -12,11 +12,6 @@ Chuỗi khối là một cấu trúc dữ liệu nơi các khối (blocks) đư�
 */
 
 // BlockChain là một chuỗi các khối, được lưu trữ dưới dạng một mảng các con trỏ tới các khối.
-type BlockChain struct {
-
-	// blocks là một mảng các con trỏ tới các Block. Mỗi phần tử trong mảng này là một con trỏ đến một đối tượng Block.
-	Blocks []*Block
-}
 
 type Block struct {
 	Hash     []byte //Đây là hash của khối hiện tại, được tính từ dữ liệu (Data) và hash của khối trước đó
@@ -54,55 +49,42 @@ func CreateBlock(data string, preHash []byte) *Block {
 	return block
 }
 
-// AddBlock thêm một khối mới vào chuỗi khối.
-// Nó lấy khối cuối cùng trong chuỗi khối (prevBlock),
-// tạo ra một khối mới với dữ liệu mới và hash của khối trước đó, sau đó thêm khối mới vào chuỗi khối.
-func (chain *BlockChain) AddBlock(data string) {
-	prevBlock := chain.Blocks[len(chain.Blocks)-1] //Lấy con trỏ đến khối cuối cùng trong chuỗi khối.
-	new := CreateBlock(data, prevBlock.Hash)       //Tạo một khối mới và trả về con trỏ tới khối đó.
-	chain.Blocks = append(chain.Blocks, new)       //Thêm con trỏ của khối mới vào mảng blocks.
-}
-
 // Genesis tạo ra khối đầu tiên trong chuỗi khối, gọi là khối gốc (genesis block).
 // Khối này có dữ liệu là "Genesis" và không có hash của khối trước đó (vì nó là khối đầu tiên).
 func Genesis() *Block {
 	return CreateBlock("Genesis", []byte{})
 }
 
-// InitBlockChain khởi tạo một chuỗi khối mới với khối gốc.
-func InitBlockChain() *BlockChain {
-
-	//Genesis tạo và trả về con trỏ tới khối gốc (genesis block).
-	return &BlockChain{[]*Block{Genesis()}}
-}
-
+// Hàm Serialize thực hiện tuần tự hóa (serialize) đối tượng Block thành một mảng byte
 func (b *Block) Serialize() []byte {
+	// Tạo một bytes.Buffer để lưu trữ dữ liệu đã tuần tự hóa.
 	var res bytes.Buffer
+
+	// Tạo một encoder gob.NewEncoder từ buffer để tuần tự hóa dữ liệu.
 	encoder := gob.NewEncoder(&res)
 
+	// Sử dụng encoder để encode đối tượng Block.
 	err := encoder.Encode(b)
-
-	if err != nil {
-		log.Panic(err)
-	}
-
 	Handle(err)
 
+	//Trả về mảng byte từ buffer.
 	return res.Bytes()
 }
 
+// Hàm Deserialize thực hiện giải tuần tự hóa (deserialize) một mảng byte thành đối tượng Block
 func Deserialize(data []byte) *Block {
+	// Tạo một đối tượng Block rỗng để lưu trữ dữ liệu giải tuần tự hóa.
 	var block Block
 
+	// Tạo một decoder gob.NewDecoder từ một bytes.NewReader được tạo từ mảng byte đầu vào
 	decoder := gob.NewDecoder((bytes.NewReader(data)))
-	err := decoder.Decode(&block)
 
-	if err != nil {
-		log.Panic(err)
-	}
+	// Sử dụng decoder để decode mảng byte vào đối tượng Block.
+	err := decoder.Decode(&block)
 
 	Handle(err)
 
+	// Trả về con trỏ tới đối tượng Block đã giải tuần tự hóa.
 	return &block
 }
 
