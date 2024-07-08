@@ -11,9 +11,9 @@ type MySQLSetting struct {
 	Username        string `mapstructure:"username"`
 	Password        string `mapstructure:"password"`
 	Dbname          string `mapstructure:"dbname"`
-	MaxIdleConns    string `mapstructure:"maxIdleConns"`
-	MaxOpenConns    string `mapstructure:"maxOpenConns"`
-	ConnMaxLifetime string `mapstructure:"connMaxLifetime"`
+	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
+	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
+	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
 }
 
 type LoggerSetting struct {

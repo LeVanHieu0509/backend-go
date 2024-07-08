@@ -2,7 +2,7 @@ server:
   port: 8001
 mysql:
   host: 127.0.0.1
-  port: 33306
+  port: 3306
   username: tipjs
   password: tipjs
   dbname: shopGo

@@ -6,6 +6,9 @@
 2. gin: go get -u github.com/gin-gonic/gin
 3. logger: go get -u go.uber.org/zap
 4. logger advance: go get github.com/natefinch/lumberjack
+5. go get -u gorm.io/gorm
+6. go get -u github.com/google/uuid
+7.
 
 ## Go (3): GIN vs ROUTER
 
