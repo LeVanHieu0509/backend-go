@@ -29,6 +29,7 @@ func main() {
 func testF() {
 	s := `dmr 1771 1.61803398875
 	ken 271828 3.14159`
+
 	r := strings.NewReader(s)
 	var a string
 	var b int
