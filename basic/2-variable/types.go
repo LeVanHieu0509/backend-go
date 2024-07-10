@@ -394,7 +394,7 @@ func channelsInit() {
 	//Closing the channel
 	close(eventsChan)
 	for event := range eventsChan {
-		fmt.Println(event)
+		fmt.Println("Kênh đệm:", event)
 	}
 
 	// Kênh không đệm
@@ -402,7 +402,7 @@ func channelsInit() {
 	go sendEvents(eventsChanKhongDem)
 
 	for event := range eventsChanKhongDem {
-		fmt.Println(event)
+		fmt.Println("Kênh không có bộ đệm:", event)
 	}
 
 }

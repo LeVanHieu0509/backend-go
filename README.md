@@ -29,6 +29,8 @@ go run cmd/cli/main.log.go
 - go test -coverprofile=coverage.out
 - go tool cover -html=coverage.out -o coverage.html (Check được độ bao phủ của test đi vào từng hàm đã đủ độ bao phủ hay chưa?)
 
+# BLOCKCHAIN
+
 PART 4
 
 - go run cmd/blockchain/index.go createblockchain -address "HIEU"

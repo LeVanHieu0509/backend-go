@@ -22,6 +22,7 @@ func (cli *CommandLine) printUsage() {
 	fmt.Println("add - block BLOCK_DATA - add a block to the chain:")
 	fmt.Println("print chain - Prints the blocks in the chain")
 	println("send - FROM to TO amount")
+	fmt.Println("-----------------------------------------------------------------------------")
 
 }
 func (cli *CommandLine) validateArgs() {
@@ -47,17 +48,19 @@ func (cli *CommandLine) printChain() {
 	for {
 		block := iter.Next()
 
-		fmt.Printf("Prev. Hash: %x\n", block.PrevHash)
-		fmt.Printf("Hash. Hash: %x\n", block.Hash)
+		fmt.Printf("Prev Hash: %x\n", block.PrevHash)
+		fmt.Printf("Hash Block: %x\n", block.Hash)
 
 		pow := blockchain.NewProof(block)
 		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
 		fmt.Println()
 
 		for _, tx := range block.Transactions {
-			fmt.Println(tx)
+			fmt.Println("Transaction ID:", tx.ID)
+			fmt.Println("Transaction Inputs:", tx.Inputs)
+			fmt.Println("Transaction Outputs:", tx.Outputs)
 		}
-		fmt.Printf("\n\n")
+		fmt.Println("-----------------------------------------------------------------------------")
 
 		if len(block.PrevHash) == 0 {
 			break
@@ -137,21 +140,23 @@ func (cli *CommandLine) send(from, to string, amount int) {
 
 // Part 4
 func (cli *CommandLine) run() {
-	cli.validateArgs()
+	cli.validateArgs() //Hàm validateArgs kiểm tra các tham số đầu vào để đảm bảo rằng chúng hợp lệ.
 	fmt.Println("---run---")
 
+	// Khởi tạo các lệnh con (FlagSet) để xử lý các lệnh cụ thể
 	getBalanceCmd := flag.NewFlagSet("getbalance", flag.ExitOnError)
 	createBlockchainCmd := flag.NewFlagSet("createblockchain", flag.ExitOnError)
 	sendCmd := flag.NewFlagSet("send", flag.ExitOnError)
 	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
 
+	// Định nghĩa các tham số cho từng lệnh con
 	getBalanceAddress := getBalanceCmd.String("address", "", "The address to get balance for")
 	createBlockchainAddress := createBlockchainCmd.String("address", "", "create blockchain address")
-
 	sendFrom := sendCmd.String("from", "", "Source wallet address")
 	sendTo := sendCmd.String("to", "", "Destination wallet address")
 	sendAmount := sendCmd.Int("amount", 0, "Amount to send")
 
+	// Xử lý các lệnh con dựa trên tham số đầu vào
 	switch os.Args[1] {
 	case "getbalance":
 		err := getBalanceCmd.Parse(os.Args[2:])
@@ -171,6 +176,7 @@ func (cli *CommandLine) run() {
 		runtime.Goexit()
 	}
 
+	// Gọi phương thức Parse để phân tích các tham số của lệnh con và xử lý lỗi nếu có.
 	if getBalanceCmd.Parsed() {
 		if *getBalanceAddress == "" {
 			getBalanceCmd.Usage()

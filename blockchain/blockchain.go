@@ -218,35 +218,62 @@ func (iter *BlockChainIterator) Next() *Block {
 	return block
 }
 
+/*
+Hàm FindUnSpentTransactions tìm và trả về tất cả các giao dịch chưa chi tiêu cho một địa chỉ cụ thể.
+Nó duyệt qua tất cả các khối trong blockchain, kiểm tra từng đầu ra của giao dịch để xem chúng có thể được mở khóa bởi địa chỉ không.
+Nếu có, nó thêm giao dịch vào danh sách các giao dịch chưa chi tiêu. Nó cũng cập nhật bản đồ spentTXOs để theo dõi các đầu ra đã chi tiêu.
+*/
+
 func (chain *BlockChain) FindUnSpentTransactions(address string) []Transaction {
+	// unspentTxs: Một mảng chứa các giao dịch chưa chi tiêu.
 	var unspentTxs []Transaction
 
+	// spentTXOs: Bản đồ chứa các đầu ra đã chi tiêu. Khóa là mã giao dịch (transaction ID) và giá trị là một danh sách các chỉ số đầu ra đã chi tiêu.
 	spentTXOs := make(map[string][]int)
 
+	// iter: Bộ lặp dùng để duyệt qua các khối trong blockchain
 	iter := chain.Iterator()
 
+	// Duyệt qua các khối trong blockchain:
 	for {
 
+		// Lấy khối tiếp theo từ bộ lặp.
 		block := iter.Next()
+
+		//Duyệt qua từng giao dịch trong khối
 		for _, tx := range block.Transactions {
+			//Mã hóa ID của giao dịch thành chuỗi hexa.
 			txID := hex.EncodeToString(tx.ID)
 		Outputs:
 			for outIdx, out := range tx.Outputs {
+				// Kiểm tra xem đầu ra đã được chi tiêu chưa
 				if spentTXOs[txID] != nil {
 					for _, spentOut := range spentTXOs[txID] {
+
+						//Nếu đầu ra hiện tại (outIdx) đã chi tiêu (spentOut == outIdx), bỏ qua đầu ra này và tiếp tục vòng lặp kế tiếp (continue Outputs).
 						if spentOut == outIdx {
 							continue Outputs
 						}
 					}
 				}
 
+				// Kiểm tra và thêm đầu ra chưa chi tiêu
 				if out.CanBeUnlocked(address) {
+					// Nếu đầu ra (out) có thể được mở khóa bởi địa chỉ (address)
+					// thêm giao dịch hiện tại (tx) vào danh sách các giao dịch chưa chi tiêu
 					unspentTxs = append(unspentTxs, *tx)
 				}
 			}
 
+			//Kiểm tra xem giao dịch có phải là giao dịch coinbase không
 			if tx.IsCoinbase() == false {
+
+				//duyệt qua tất cả các đầu vào (in) của giao dịch.
 				for _, in := range tx.Inputs {
+					// Kiểm tra xem đầu vào có thể được mở khóa bởi địa chỉ không
+					// Nếu đầu vào có thể được mở khóa, thêm ID của giao dịch đầu vào (inTxID)
+					// và chỉ số đầu ra (in.Out) vào bản đồ spentTXOs, để theo dõi các đầu ra đã chi tiêu.
+
 					if in.CanUnlock(address) {
 						inTxID := hex.EncodeToString(in.ID)
 						spentTXOs[inTxID] = append(spentTXOs[inTxID], in.Out)
@@ -255,6 +282,8 @@ func (chain *BlockChain) FindUnSpentTransactions(address string) []Transaction {
 			}
 		}
 
+		// Kiểm tra xem khối có phải là khối gốc không
+		// Nếu khối là khối gốc (không có hash trước đó), thoát khỏi vòng lặp.
 		if len(block.PrevHash) == 0 {
 			break
 		}
@@ -278,20 +307,41 @@ func (chain *BlockChain) FindUTXO(address string) []TxOutput {
 
 }
 
+/*
+Hàm FindSpendableOutputs trong hệ thống blockchain được dùng để tìm các đầu ra chưa chi tiêu (unspent outputs)
+cho một địa chỉ cụ thể và kiểm tra xem tổng giá trị của các đầu ra này
+có đủ để thực hiện một giao dịch với số tiền yêu cầu hay không
+*/
+
 func (chain *BlockChain) FindSpendableOutputs(address string, amount int) (int, map[string][]int) {
+	// Bản đồ để lưu trữ các đầu ra chưa chi tiêu, với mã giao dịch là khóa và danh sách các chỉ số của các đầu ra là giá trị.
 	unspentOuts := make(map[string][]int)
+
+	// Danh sách các giao dịch chưa chi tiêu cho địa chỉ cụ thể.
 	unspentTxs := chain.FindUnSpentTransactions(address)
+
+	// Tổng giá trị các đầu ra đã tìm thấy.
 	accumulated := 0
 
+	// Duyệt qua các giao dịch chưa chi tiêu
 Work:
 	for _, tx := range unspentTxs {
+		// Mã giao dịch được mã hóa thành chuỗi hexa.
 		txID := hex.EncodeToString(tx.ID)
 
+		// outIdx: Chỉ số của đầu ra trong danh sách đầu ra của giao dịch.
+		// out: Đối tượng đầu ra của giao dịch.
 		for outIdx, out := range tx.Outputs {
+			// Kiểm tra xem đầu ra có thể được mở khóa bằng địa chỉ người gửi hay không.
+			// accumulated < amount: Kiểm tra xem tổng giá trị các đầu ra tìm thấy có nhỏ hơn số tiền yêu cầu hay không.
 			if out.CanBeUnlocked(address) && accumulated < amount {
+				// Cộng giá trị của đầu ra vào tổng giá trị tích lũy (accumulated).
 				accumulated += out.Value
+
+				// Thêm chỉ số của đầu ra vào bản đồ unspentOuts.
 				unspentOuts[txID] = append(unspentOuts[txID], outIdx)
 
+				// Nếu tổng giá trị tích lũy đã đủ để thực hiện giao dịch, thoát khỏi vòng lặp Work.
 				if accumulated >= amount {
 					break Work
 				}
@@ -300,6 +350,8 @@ Work:
 
 	}
 
+	// accumulated: Trả về tổng giá trị các đầu ra có thể chi tiêu
+	// unspentOuts: Trả về một bản đồ chứa các đầu ra có thể chi tiêu
 	return accumulated, unspentOuts
 
 }
