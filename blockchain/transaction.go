@@ -23,13 +23,22 @@ type Transaction struct {
 }
 
 // Đại diện cho một đầu vào của giao dịch với các trường
+// Trong Bitcoin, đầu ra có trước đầu vào.
 type TxInput struct {
+	// ID: Lưu trữ ID của giao dịch đó
+	// Out: lưu trữ chỉ mục của đầu ra trong giao dịch.
+	// Nếu dữ liệu đúng, đầu ra có thể được mở khóa và giá trị của nó có thể được sử dụng để tạo ra các đầu ra mới
+	// nếu không đúng, đầu ra không thể được tham chiếu trong đầu vào.
+	// Đây là cơ chế đảm bảo rằng người dùng không thể chi tiêu tiền xu thuộc về người khác.
+
 	ID  []byte //Mã định danh của giao dịch trước đó
 	Out int    //Chỉ số của đầu ra trong giao dịch trước đó
 	Sig string //Chữ ký của người gửi
 }
 
 type TxOutput struct {
+	// Đầu ra là nơi lưu trữ "tiền xu".
+	// Mỗi giao dịch mới phải có ít nhất một đầu vào và đầu ra
 	Value  int    //Giá trị của đầu ra.
 	PubKey string //Khóa công khai của người nhận
 }
@@ -50,6 +59,9 @@ func (tx *Transaction) SetId() {
 }
 
 // Là giao dịch đặc biệt để tạo ra tiền mới, không có đầu vào thực sự.
+// Giao dịch coinbase chỉ có một đầu vào
+// giao dịch coinbase không lưu trữ tập lệnh trong ScriptSig
+
 func CoinbaseTx(to, data string) *Transaction {
 	if data == "" {
 		data = fmt.Sprintf("Coins to %s", to)
@@ -91,6 +103,10 @@ func (out *TxOutput) CanBeUnlocked(data string) bool {
 // to: Địa chỉ của người nhận.
 // amount: Số tiền giao dịch.
 // chain: Chuỗi khối (blockchain) mà giao dịch sẽ được thêm vào.
+
+// Bây giờ, chúng ta muốn gửi một số coin cho người khác. Để làm được điều này, chúng ta cần tạo một giao dịch mới
+// đưa nó vào một khối và khai thác khối đó. Cho đến nay, chúng ta chỉ triển khai giao dịch coinbase
+// (là một loại giao dịch đặc biệt), bây giờ chúng ta cần một giao dịch chung:
 
 func NewTransaction(from, to string, amount int, chain *BlockChain) *Transaction {
 	var inputs []TxInput

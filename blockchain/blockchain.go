@@ -12,13 +12,14 @@ import (
 const (
 	dbPath      = "./tmp/blocks"
 	dbFile      = "./tmp/blocks/MANIFEST"
-	genesisData = "First Transaction from Genesis"
+	genesisData = "The Times 03/01/2009 Chancellor on brink of second rescue for banks"
 )
 
 // Cấu trúc chính của blockchain, chứa thông tin về hash của khối cuối cùng và cơ sở dữ liệu.
 type BlockChain struct {
 
 	// blocks là một mảng các con trỏ tới các Block. Mỗi phần tử trong mảng này là một con trỏ đến một đối tượng Block.
+	// sử dụng một mảng và một bản đồ: mảng sẽ giữ các giá trị băm có thứ tự
 	// Blocks []*Block
 
 	LashHash []byte     //Lưu trữ hash của khối cuối cùng trong blockchain.
@@ -258,6 +259,8 @@ func (chain *BlockChain) FindUnSpentTransactions(address string) []Transaction {
 				}
 
 				// Kiểm tra và thêm đầu ra chưa chi tiêu
+				// Vì các giao dịch được lưu trữ trong các khối, chúng ta phải kiểm tra mọi khối trong một blockchain.
+				// Chúng ta bắt đầu với các đầu ra:
 				if out.CanBeUnlocked(address) {
 					// Nếu đầu ra (out) có thể được mở khóa bởi địa chỉ (address)
 					// thêm giao dịch hiện tại (tx) vào danh sách các giao dịch chưa chi tiêu
@@ -292,6 +295,8 @@ func (chain *BlockChain) FindUnSpentTransactions(address string) []Transaction {
 	return unspentTxs
 }
 
+// Hàm trả về danh sách các giao dịch chứa các đầu ra chưa chi.
+// Để tính số dư, chúng ta cần thêm một hàm nữa lấy các giao dịch và chỉ trả về đầu ra:
 func (chain *BlockChain) FindUTXO(address string) []TxOutput {
 	var UTXOs []TxOutput
 	unspentTransactions := chain.FindUnSpentTransactions(address)

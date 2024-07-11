@@ -29,7 +29,7 @@ import (
 // Requirements:
 // The first few bytes must contain 0s
 
-const Difficulty = 16 // Độ khó đào xác đinh số bit 0 cần thiết ở đầu của hàm băm hợp lệ.
+const Difficulty = 30 // Độ khó đào xác đinh số bit 0 cần thiết ở đầu của hàm băm hợp lệ.
 
 type ProofOfWork struct {
 	Block  *Block
@@ -37,6 +37,11 @@ type ProofOfWork struct {
 }
 
 // NewProof khởi tạo một đối tượng ProofOfWork mới với khối (Block) và mục tiêu băm (Target)
+// cấu trúc chứa một con trỏ đến một khối và một con trỏ đến một mục tiêu.
+
+// Bạn có thể nghĩ về mục tiêu như ranh giới trên của một phạm vi: nếu một số (một băm) thấp hơn ranh giới,
+// thì nó hợp lệ và ngược lại. Việc hạ thấp ranh giới sẽ dẫn đến ít số hợp lệ hơn và do đó, cần phải làm việc khó khăn hơn để tìm ra số hợp lệ.
+
 func NewProof(b *Block) *ProofOfWork {
 
 	//được tính bằng cách dịch trái số 1 với 256 - Difficulty bit. Điều này tạo ra một giá trị mà hash phải nhỏ hơn hoặc bằng để được coi là hợp lệ.
@@ -78,22 +83,31 @@ func ToHex(num int64) []byte {
 // Run là vòng lặp thực hiện công việc tính toán.
 // Bắt đầu với nonce bằng 0, tạo dữ liệu đầu vào và tính toán hash.
 func (pow *ProofOfWork) Run() (int, []byte) {
-	var intHash big.Int
+	var intHash big.Int //biểu diễn số nguyên của hash
 	var hash [32]byte
 
+	// nonce: Đây là bộ đếm từ mô tả Hashcash ở trên, đây là một thuật ngữ mật mã.
 	nonce := 0
 
+	//nonce < math.MaxInt64: điều này được thực hiện để tránh tràn số có thể xảy ra của nonce
 	for nonce < math.MaxInt64 {
+		//1. Chuẩn bị dữ liệu.
 		data := pow.InitData(nonce)
 		fmt.Println("nonce", nonce, ":", data)
+
+		//2. Băm nó bằng SHA-256
 		hash = sha256.Sum256(data)
 
 		//In hash ra màn hình để theo dõi tiến trình.
 		fmt.Printf("nonce:%x : \r%x \n", nonce, hash)
+
+		//3. Chuyển đổi giá trị băm thành số nguyên lớn.
 		intHash.SetBytes((hash[:]))
 
 		// Kiểm tra xem hash có nhỏ hơn mục tiêu (Target) không.
 		// Nếu có, vòng lặp dừng lại và trả về nonce cùng với hash. Nếu không, tăng nonce và lặp lại.
+
+		//4. So sánh số nguyên với mục tiêu.
 		if intHash.Cmp(pow.Target) == -1 {
 			break
 		} else {

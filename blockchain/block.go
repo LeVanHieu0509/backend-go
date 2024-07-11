@@ -12,6 +12,9 @@ Chuỗi khối là một cấu trúc dữ liệu nơi các khối (blocks) đư�
 */
 
 // BlockChain là một chuỗi các khối, được lưu trữ dưới dạng một mảng các con trỏ tới các khối.
+// Khối duy trì dữ liệu về người nhận, người gửi và số lượng coin.
+// Thợ đào được giữ phí giao dịch từ khối mà họ đã xác minh như một phần thưởng
+// Hệ thống đồng thuận là một tập hợp các quy tắc mạng và nếu mọi người tuân thủ chúng, chúng sẽ tự thực thi bên trong blockchain.
 
 type Block struct {
 	Hash []byte //Đây là hash của khối hiện tại, được tính từ dữ liệu (Data) và hash của khối trước đó
@@ -102,11 +105,17 @@ func CreateBlock(tsx []*Transaction, preHash []byte) *Block {
 // }
 
 // transaction
+// Về mặt logic, khối đầu tiên không chứa con trỏ vì đây là khối đầu tiên trong chuỗi.
+// Đồng thời, có khả năng sẽ có khối cuối cùng trong cơ sở dữ liệu blockchain có con trỏ không có giá trị.
+
 func Genesis(coinbase *Transaction) *Block {
 	return CreateBlock([]*Transaction{coinbase}, []byte{})
 }
 
 // Hàm Serialize thực hiện tuần tự hóa (serialize) đối tượng Block thành một mảng byte
+// chúng ta khai báo một bộ đệm sẽ lưu trữ dữ liệu được tuần tự hóa;
+// sau đó chúng ta khởi tạo một gob bộ mã hóa và mã hóa khối; kết quả được trả về dưới dạng một mảng byte.
+
 func (b *Block) Serialize() []byte {
 	// Tạo một bytes.Buffer để lưu trữ dữ liệu đã tuần tự hóa.
 	var res bytes.Buffer
