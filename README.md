@@ -8,7 +8,7 @@
 4. logger advance: go get github.com/natefinch/lumberjack
 5. go get -u gorm.io/gorm
 6. go get -u github.com/google/uuid
-7.
+7. go get -u github.com/redis/go-redis/v9
 
 ## Go (3): GIN vs ROUTER
 
