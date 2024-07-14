@@ -12,3 +12,10 @@ func HandleErr(err error, msg string) {
 		return
 	}
 }
+
+func HandleShouldBindJSONErr(err error, msg string) {
+	if err != nil {
+		HandleErr(err, msg)
+		return
+	}
+}

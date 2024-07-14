@@ -6,7 +6,6 @@ import (
 
 	"github.com/LeVanHieu0509/backend-go/global"
 	c "github.com/LeVanHieu0509/backend-go/internal/controller"
-	"github.com/LeVanHieu0509/backend-go/internal/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +33,7 @@ func CC(ctx *gin.Context) {
 
 func InitRouter() *gin.Engine {
 	r := gin.Default() //func để tạo instance mặc định
-	r.Use(middlewares.AuthMiddleware(), AA(), BB(), CC)
+	// r.Use(middlewares.AuthMiddleware(), AA(), BB(), CC)
 
 	v1 := r.Group("v1/2024")
 	{
@@ -54,6 +53,12 @@ func InitRouter() *gin.Engine {
 		v2.DELETE("/ping", Pong)
 		v2.HEAD("/ping", Pong)
 		v2.OPTIONS("/ping", Pong)
+	}
+
+	v3 := r.Group("v3/application")
+	{
+		v3.POST("/login", c.NewAuthController().Login)
+
 	}
 
 	return r

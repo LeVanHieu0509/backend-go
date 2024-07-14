@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	c "github.com/LeVanHieu0509/backend-go/internal/controller"
-	"github.com/LeVanHieu0509/backend-go/internal/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,7 +32,6 @@ func CC(ctx *gin.Context) {
 
 func NewsRouter() *gin.Engine {
 	r := gin.Default() //func để tạo instance mặc định
-	r.Use(middlewares.AuthMiddleware(), AA(), BB(), CC)
 
 	v1 := r.Group("v1/2024")
 	{

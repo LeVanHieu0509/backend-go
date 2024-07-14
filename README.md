@@ -18,7 +18,7 @@ Note:
 
 - Viết Hoa Function thì mới được gọi trong go
 - Sử dụng zap để ghi log được thiết kế để sử dụng trong ứng dụng GO => có hiệu suất vượt trội với hiệu suất cao.
-- install go: go get -u go.uber.org/zap
+- Trong Go, chỉ những hàm, phương thức, hoặc biến bắt đầu bằng chữ cái viết hoa mới có thể truy cập từ bên ngoài package.
 
 go run cmd/cli/main.log.go
 
