@@ -1,84 +1,43 @@
 package initialize
 
 import (
-	"fmt"
-	"net/http"
-
 	"github.com/LeVanHieu0509/backend-go/global"
-	c "github.com/LeVanHieu0509/backend-go/internal/controller"
+	"github.com/LeVanHieu0509/backend-go/internal/routers"
 	"github.com/gin-gonic/gin"
 )
 
-func AA() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		fmt.Println("Before --> AA")
-		ctx.Next()
-		fmt.Println("Alter --> AA")
-	}
-}
-
-func BB() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		fmt.Println("Before --> BB")
-		ctx.Next()
-		fmt.Println("Alter --> BB")
-	}
-}
-
-func CC(ctx *gin.Context) {
-	fmt.Println("Before --> CC")
-	ctx.Next()
-	fmt.Println("Alter --> CC")
-}
-
 func InitRouter() *gin.Engine {
-	r := gin.Default() //func để tạo instance mặc định
-	// r.Use(middlewares.AuthMiddleware(), AA(), BB(), CC)
-
-	v1 := r.Group("v1/2024")
-	{
-		v1.GET("/ping", Pong)
-		v1.GET("/user/1", c.NewUserController().GetUserById)
-		v1.PATCH("/ping", Pong)
-		v1.DELETE("/ping", Pong)
-		v1.HEAD("/ping", Pong)
-		v1.OPTIONS("/ping", Pong)
+	// Nếu trong môi trường dev thì cần phải ghi log lại
+	// r := gin.Default()
+	var r *gin.Engine
+	if global.Config.Server.Mode == "dev" {
+		gin.SetMode(gin.DebugMode)
+		gin.ForceConsoleColor()
+		r = gin.Default()
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+		r = gin.New()
 	}
 
-	v2 := r.Group("v2/2024")
+	// Khai báo theo sơ đồ Big team 1
+	// r.Use() //Logger
+	// r.Use() //Cross
+	// r.Use() //Limiter global
+	managerRouter := routers.RouterGroupApp.Manager
+	userRouter := routers.RouterGroupApp.User
+
+	MainGroup := r.Group("/v1/2024")
 	{
-		v2.GET("/ping", Pong)
-		v2.PUT("/ping", Pong)
-		v2.PATCH("/ping", Pong)
-		v2.DELETE("/ping", Pong)
-		v2.HEAD("/ping", Pong)
-		v2.OPTIONS("/ping", Pong)
+		MainGroup.GET("/check-status") //tracking monitor
 	}
-
-	v3 := r.Group("v3/application")
 	{
-		v3.POST("/login", c.NewAuthController().Login)
-
+		userRouter.InitUserRouter(MainGroup)
+		userRouter.InitProductRouter(MainGroup)
+	}
+	{
+		managerRouter.InitUserRouter(MainGroup)
+		managerRouter.InitAdminRouter(MainGroup)
 	}
 
 	return r
-}
-
-func Pong(ctx *gin.Context) { //ctx: xử lý request và response
-	//Json trả về client format JSON
-	// gin.H: map string {key: value}
-
-	name := ctx.Param("name")
-	age := ctx.DefaultQuery("age", "hieu") // If age not has, set age -> hieu
-	uid := ctx.Query("uid")                //default
-	fmt.Printf("My HANDLE\n")
-	// Sử dụng Logger
-	global.Logger.Info("Application started, trace-id")
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "pong" + name,
-		"uid":     uid,
-		"age":     age,
-		"users":   []string{"cr07", "m10"},
-	})
 }
