@@ -23,6 +23,7 @@ func main() {
 	fmt.Println(h, math.MaxUint8) //32767
 	// To-do: add rocket science
 
+	// Giá trị số nguyên này có nghĩa là đại diện cho một Điểm mã Unicode (Unicode là siêu tập hợp các ký tự ASCII )
 	var pi rune = 960
 	var alpha rune = 940
 	var omega rune = 969

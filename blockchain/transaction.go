@@ -82,6 +82,12 @@ func CoinbaseTx(to, data string) *Transaction {
 }
 
 // Hàm: IsCoinbase kiểm tra xem giao dịch có phải là giao dịch coinbase hay không
+
+/*
+IsCoinbase là một method của struct Transaction, nghĩa là nó phải được gọi trên một đối tượng cụ thể của Transaction.
+Cách gọi: Để gọi method IsCoinbase trên một đối tượng Transaction, bạn cần một instance của Transaction. Dưới đây là cách bạn có thể gọi IsCoinbase:
+*/
+
 func (tx *Transaction) IsCoinbase() bool {
 
 	// Giao dịch coinbase có một đầu vào duy nhất với ID rỗng và Out là -1.
@@ -108,6 +114,10 @@ func (out *TxOutput) CanBeUnlocked(data string) bool {
 // đưa nó vào một khối và khai thác khối đó. Cho đến nay, chúng ta chỉ triển khai giao dịch coinbase
 // (là một loại giao dịch đặc biệt), bây giờ chúng ta cần một giao dịch chung:
 
+/*
+NewTransaction là một hàm đứng độc lập và không phụ thuộc vào một đối tượng cụ thể.
+Bạn có thể gọi nó trực tiếp bằng cú pháp blockchain.NewTransaction(...).
+*/
 func NewTransaction(from, to string, amount int, chain *BlockChain) *Transaction {
 	var inputs []TxInput
 	var outputs []TxOutput

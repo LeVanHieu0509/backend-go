@@ -115,6 +115,10 @@ func InitBlockChain(address string) *BlockChain {
 }
 
 // Part 4
+/*
+	Hàm ContinueBlockchain trong đoạn mã này thực hiện nhiệm vụ kết nối với một blockchain hiện có
+	được lưu trữ trong cơ sở dữ liệu và tiếp tục hoạt động trên blockchain đó. Nếu không tồn tại blockchain
+*/
 func ContinueBlockchain(address string) *BlockChain {
 	if DBexists() == false {
 		fmt.Println("No Existing blockchain found, create one")
