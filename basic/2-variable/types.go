@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math"
 	"math/bits"
 	"math/cmplx"
+	"os"
 	"reflect"
 	"unsafe"
 )
@@ -121,6 +123,8 @@ func main() {
 	arrayInit()
 	fmt.Println("---------------------struct---------------------")
 	structInit()
+	fmt.Println("---------------------defer---------------------")
+	deferInit()
 	fmt.Println("---------------------make---------------------")
 	makeInit()
 	fmt.Println("-----------------------channels-------------------")
@@ -332,13 +336,64 @@ func structInit() {
 
 }
 
+// đọc toàn bộ nội dung của tệp đó và trả về nội dung dưới dạng chuỗi
+// Thường được sử dụng để close 1 kết nối sau khi open
+
+func deferInit() (string, error) {
+	/*
+		Câu lệnh trì hoãn của Go lên lịch cho một lệnh gọi hàm (hàm trì hoãn) được chạy ngay lập tức
+		trước khi hàm thực hiện lệnh trì hoãn trả về.
+		Đó là một cách bất thường nhưng hiệu quả để giải quyết các tình huống như tài nguyên
+		phải được giải phóng bất kể hàm đó đi theo đường nào để trả về.
+		Các ví dụ điển hình là mở khóa mutex hoặc đóng tệp.
+	*/
+
+	f, err := os.Open("../../log/log.txt")
+
+	fmt.Println("f", f)
+
+	if err != nil {
+		fmt.Println(err)
+		return "error", err
+	}
+
+	// đảm bảo rằng tệp sẽ được đóng khi hàm deferInit kết thúc, dù kết thúc theo cách nào.
+	// Dù hàm kết thúc theo cách nào (trả về từ giữa hàm hoặc từ cuối hàm), tệp f vẫn sẽ được đóng do lệnh defer f.Close().
+
+	// Khi bạn sử dụng defer, bạn đang lên lịch cho một hàm (gọi là hàm deferred) sẽ được thực thi ngay trước khi hàm chứa defer trả về.
+	// Các hàm deferred được xếp vào một ngăn xếp. Khi hàm bao quanh trả về, các hàm deferred được gọi theo thứ tự LIFO (Last In, First Out).
+	defer f.Close() // f.Close will run when we're finished.
+
+	var result []byte
+	buf := make([]byte, 100)
+	for {
+		n, err := f.Read(buf[0:])
+		result = append(result, buf[0:n]...) // append is discussed later.
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return "", err // f will be closed if we return here.
+		}
+	}
+
+	defer fmt.Println("hieu")
+	return string(result), nil // f will be closed if we return here.
+
+}
+
 func makeInit() {
 	// có kích thước động, tham chiếu đến các phần tử của mảng
 	// là một kiểu tham chiếu vì nó tham chiếu nội bộ một mảng
 
 	// format: make([]TYPE, length, capacity)
-	s := make([]string, 2, 3)
-	fmt.Println(s)
+	dwarfs1 := make([]string, 0, 10)
+	dwarfs1 = append(dwarfs1, "Ceres", "Pluto", "Haumea", "Makemake", "Eris")
+
+	s := make([]string, 1, 1)
+	ok := append(s, "Crea")
+
+	fmt.Println(s, ok)
 
 	//Direct intialization
 	p := []string{"a", "b", "c"}

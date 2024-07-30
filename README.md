@@ -9,6 +9,7 @@
 5. go get -u gorm.io/gorm
 6. go get -u github.com/google/uuid
 7. go get -u github.com/redis/go-redis/v9
+8. go get -u github.com/segmentio/kafka-go
 
 ## Go (3): GIN vs ROUTER
 
@@ -41,3 +42,8 @@ PART 4
 PART 5
 
 - go run cmd/blockchain/index.go createwallet
+
+## Cli
+
+1. go list -m all
+2. go list -m -versions

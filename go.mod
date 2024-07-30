@@ -5,6 +5,12 @@ go 1.22.4
 require gorm.io/driver/mysql v1.5.7
 
 require (
+	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/pierrec/lz4/v4 v4.1.21 // indirect
+	github.com/segmentio/kafka-go v0.4.47 // indirect
+)
+
+require (
 	github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96 // indirect
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/bytedance/sonic v1.11.9 // indirect
