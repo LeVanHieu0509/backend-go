@@ -47,3 +47,8 @@ PART 5
 
 1. go list -m all
 2. go list -m -versions
+
+### Proto
+
+1. go get -u google.golang.org/protobuf/reflect/protoreflect
+1. go get -u google.golang.org/protobuf/runtime/protoimpl

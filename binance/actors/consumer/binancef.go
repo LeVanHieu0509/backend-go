@@ -5,13 +5,22 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strconv"
 	"strings"
 
 	"github.com/LeVanHieu0509/backend-go/binance/actors/symbol"
+	"github.com/LeVanHieu0509/backend-go/binance/event"
 	"github.com/asynkron/protoactor-go/actor"
 	"github.com/gorilla/websocket"
 	"github.com/valyala/fastjson"
 )
+
+/*
+Summary: Mã này tạo một hệ thống dựa trên các actor để theo dõi các sự kiện từ Binance qua WebSocket.
+Nó khởi tạo kết nối WebSocket, tạo các actor con cho từng symbol,
+và gửi các sự kiện MarketPrice đến các actor tương ứng khi nhận được thông điệp từ WebSocket.
+Việc sử dụng thư viện actor giúp mã dễ dàng mở rộng và quản lý tốt hơn các tác vụ song song.
+*/
 
 //22p: https://www.youtube.com/watch?v=16kAjS2lNAs
 
@@ -22,7 +31,7 @@ import (
 const wsEndpoint = "wss://fstream.binance.com/stream?streams="
 
 // Mảng các cặp giao dịch mà bạn muốn theo dõi. Trong trường hợp này là btcusdt và ethusdt.
-var symbols = []string{"btcusdt", "ethusdt"}
+var symbols = []string{"btcusdt", "ethusdt", "wusdt"}
 
 /*
 xây dựng một URL kết nối tới WebSocket của Binance để nhận các loại dữ liệu khác nhau
@@ -46,19 +55,25 @@ func createWSEndPoint() string {
 }
 
 // Tạo ra một hệ thống sử dụng WebSocket để kết nối tới Binance và nhận dữ liệu từ các stream, đồng thời sử dụng thư viện actor để quản lý các tác nhân (actors).
+
 type Binancef struct {
-	ws  *websocket.Conn //Kết nối WebSocket.
-	ctx actor.Context   //Ngữ cảnh của actor.
+	ws      *websocket.Conn       //Kết nối WebSocket.
+	ctx     actor.Context         //Ngữ cảnh của actor.
+	symbols map[string]*actor.PID //bản đồ symbols để lưu các PID của các symbol.
 }
 
 // Tạo một producer cho actor Binancef.
 func NewBinancef() actor.Producer {
+	// actor Binancef có vai trò chính trong việc kết nối và nhận thông điệp từ WebSocket
 	return func() actor.Actor {
-		return &Binancef{}
+		// Binancef actor quản lý kết nối WebSocket và khởi tạo các actor con cho từng symbol.
+		return &Binancef{
+			symbols: make(map[string]*actor.PID),
+		}
 	}
 }
 
-// Nhận thông điệp và thực hiện hành động tương ứng
+// Hàm nhận thông điệp và thực hiện hành động tương ứng. Khi actor bắt đầu, nó thiết lập ngữ cảnh và bắt đầu kết nối WebSocket.
 func (a *Binancef) Receive(c actor.Context) {
 	switch msg := c.Message().(type) {
 	case *actor.Started:
@@ -71,7 +86,8 @@ func (a *Binancef) Receive(c actor.Context) {
 
 }
 
-// Vòng lặp để đọc thông điệp từ WebSocket
+// Vòng lặp để đọc thông điệp từ WebSocket.
+// Nó phân tích cú pháp thông điệp, tách thông tin stream thành symbol và kind, và gửi sự kiện MarketPrice đến PID tương ứng.
 func (a *Binancef) wsLoop() {
 	/*
 		Đọc thông điệp, nếu có lỗi, kiểm tra lỗi và xử lý phù hợp.
@@ -96,28 +112,57 @@ func (a *Binancef) wsLoop() {
 		}
 		stream := v.GetStringBytes("stream")
 		symbol, kind := splitStream(string(stream))
+		data := v.Get("data")
 
+		// Kiểm tra nếu loại thông điệp nhận được là aggTrade.
+		if kind == "aggTrade" {
+			// convert data difficult => data ez
+			if pid, ok := a.symbols[symbol]; ok {
+				price, _ := strconv.ParseFloat(string(data.GetStringBytes("p")), 64)
+				maker, _ := strconv.ParseBool(string(data.GetStringBytes("m")))
+				qty, _ := strconv.ParseFloat(string(data.GetStringBytes("q")), 64)
+
+				// Các actor con tương ứng với từng symbol sẽ nhận và xử lý các sự kiện MarketPrice cụ thể.
+				a.ctx.Send(pid, &event.Trade{
+					Symbol: symbol,
+					Price:  price,
+					Marker: maker,
+					Qty:    qty,
+				})
+			}
+		}
 		if kind == "markPrice" {
 			_ = symbol
 			fmt.Println("symbol actor started:", symbol)
 			// fmt.Printf("%s => %s\n", symbol, kind)
+
+			if pid, ok := a.symbols[symbol]; ok {
+				price, _ := strconv.ParseFloat(string(data.GetStringBytes("p")), 64)
+
+				// Các actor con tương ứng với từng symbol sẽ nhận và xử lý các sự kiện MarketPrice cụ thể.
+				a.ctx.Send(pid, &event.MarketPrice{
+					Symbol: symbol,
+					Price:  price,
+				})
+			}
 		}
 		// data := v.Get("data")
 		// fmt.Println(data)
 	}
 }
 
-// Kết nối tới WebSocket endpoint của Binance
+// Kết nối tới WebSocket endpoint của Binance và khởi tạo các actor con cho từng symbol.
 func (a *Binancef) start() {
 	c, _, err := websocket.DefaultDialer.Dial(createWSEndPoint(), nil)
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
+
 	a.ws = c
 
 	for _, s := range symbols {
 		pid, _ := a.ctx.SpawnNamed(actor.PropsFromProducer(symbol.New(s)), s)
-
+		a.symbols[s] = pid
 		fmt.Println("spawning symbol child actor", pid)
 	}
 	// bắt đầu vòng lặp wsLoop trong một goroutine
@@ -144,3 +189,9 @@ func splitStream(stream string) (string, string) {
 	parts := strings.Split(stream, "@")
 	return parts[0], parts[1]
 }
+
+/*
+	Actor model cung cấp một cách tiếp cận mạnh mẽ và linh hoạt để quản lý các tác vụ đồng thời và không đồng bộ trong hệ thống của bạn.
+	Nó giúp bạn quản lý trạng thái một cách an toàn, xử lý các tác vụ một cách hiệu quả, và dễ dàng mở rộng hệ thống.
+	Việc sử dụng actor trong hệ thống của bạn giúp mã dễ đọc, dễ bảo trì và có hiệu năng cao.
+*/
