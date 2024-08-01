@@ -7,17 +7,22 @@ import (
 	ty "github.com/LeVanHieu0509/backend-go/types_custom"
 )
 
-type AuthService struct {
-	authRepo *repo.AuthRepo
+type authService struct {
+	authRepo repo.IUserRepository
 }
 
-func NewAuthService() *AuthService {
-	return &AuthService{
-		authRepo: repo.NewAuthRepo(),
-	}
+type IAuthService interface {
+	Login(data ty.LoginReq) string
+	SignUp(data ty.SignUpRequest) string
+	Logout(data ty.SignUpRequest) string
+	RefreshToken(data ty.SignUpRequest) string
 }
 
-func (auth *AuthService) Login(data ty.LoginReq) string {
+func NewAuthService(userRepo repo.IUserRepository) IAuthService {
+	return &authService{authRepo: userRepo}
+}
+
+func (auth *authService) Login(data ty.LoginReq) string {
 	/*
 		step:
 		1. Mỗi User khi login đều phải có 2 key: publicKey và privateKey
@@ -26,9 +31,9 @@ func (auth *AuthService) Login(data ty.LoginReq) string {
 		4. Lấy cặp key rsa từ database của user đó để gen ra token trả về cho client kèm thông tin
 
 	*/
-	foundUser := auth.authRepo.FindByUserName()
+	foundUser := auth.authRepo.GetUserByEmail(data.Username)
 
-	if foundUser == 0 {
+	if !foundUser {
 		fmt.Println("User not found")
 		return "0"
 	}
@@ -37,7 +42,7 @@ func (auth *AuthService) Login(data ty.LoginReq) string {
 	return "1"
 }
 
-func (auth *AuthService) SignUp(data ty.SignUpRequest) string {
+func (auth *authService) SignUp(data ty.SignUpRequest) string {
 	/*
 		1. Check User
 		2. Hash password
@@ -50,7 +55,7 @@ func (auth *AuthService) SignUp(data ty.SignUpRequest) string {
 	return "1"
 }
 
-func (auth *AuthService) Logout(data ty.SignUpRequest) string {
+func (auth *authService) Logout(data ty.SignUpRequest) string {
 	/*
 		1. Check header, get key store
 		2. Check resfresh token
@@ -59,7 +64,7 @@ func (auth *AuthService) Logout(data ty.SignUpRequest) string {
 	return "1"
 }
 
-func (auth *AuthService) RefreshToken(data ty.SignUpRequest) string {
+func (auth *authService) RefreshToken(data ty.SignUpRequest) string {
 	/*
 		1. Check header
 		2. check key store

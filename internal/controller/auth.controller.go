@@ -12,13 +12,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type IAuthController interface {
+	Login(ctx *gin.Context)
+	SignUp()
+	Logout()
+	RefreshToken()
+	ChangePass()
+	DeleteUser()
+}
 type AuthController struct {
-	authService *service.AuthService
+	authService service.IAuthService
 }
 
-func NewAuthController() *AuthController {
+func NewAuthController(authService service.IAuthService) *AuthController {
 	return &AuthController{
-		authService: service.NewAuthService(),
+		authService: authService,
 	}
 }
 
