@@ -1,0 +1,29 @@
+// Đây là khai báo sử dụng phiên bản 3 của Protocol Buffers.
+syntax = "proto3";
+
+// Định nghĩa gói tên là proto. Tên gói này được sử dụng để tránh xung đột tên giữa các tệp Proto khác nhau.
+package proto;
+
+// Tùy chọn này xác định gói Go cho các tệp Go được sinh ra. ./ chỉ định thư mục hiện tại và proto là tên gói Go.
+option go_package = "./;proto";
+
+// Định nghĩa một dịch vụ gRPC tên là OrderService với một phương thức NewOrder. 
+// Phương thức này nhận một thông điệp NewRequestOrder và trả về một thông điệp NewResponseOrder.
+service OrderService {
+  // Định nghĩa rpc service
+  rpc NewOrder(NewRequestOrder) returns (NewResponseOrder);
+}
+
+// Định nghĩa message NewRequestOrder
+message NewRequestOrder {
+  string orderRequest = 1; // Định nghĩa trường với chỉ số trường là 1
+}
+
+// Định nghĩa message NewResponseOrder
+message NewResponseOrder {
+  string orderResponse = 2; // Định nghĩa trường với chỉ số trường là 2
+  int32 id = 3;
+}
+
+
+//Phải cần biên dịch
