@@ -81,4 +81,4 @@ Lệnh này sẽ tạo ra hai tệp Go: một cho định nghĩa giao thức và
 --go_out=.: Chỉ định đầu ra cho mã Go từ Protocol Buffers.
 --go-grpc_out=.: Chỉ định đầu ra cho mã gRPC từ Protocol Buffers.
 
-protoc --go_out=. --go-grpc_out=. order.proto
+protoc --go_out=. --go-grpc_out=. event.proto

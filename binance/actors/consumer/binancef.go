@@ -126,7 +126,7 @@ func (a *Binancef) wsLoop() {
 				a.ctx.Send(pid, &event.Trade{
 					Symbol: symbol,
 					Price:  price,
-					Marker: maker,
+					Maker:  maker,
 					Qty:    qty,
 				})
 			}

@@ -1,6 +1,6 @@
-syntax = "proto3"
+syntax = "proto3";
 package event;
-option_go_package = "github.com/anthdm/event";
+option go_package = "./;event";
 
 message MarketPrice {
                 string symbol = 1;
@@ -8,7 +8,7 @@ message MarketPrice {
 }
 
 message Trade{
-                double symbol = 1;
+                string symbol = 1;
                 double price = 2;
                 double qty = 3;
                 bool maker = 4;
