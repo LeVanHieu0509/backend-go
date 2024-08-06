@@ -4,16 +4,21 @@ option go_package = "github.com/asynkron/protoactor-go/examples/remote-chat/mess
 import "actor.proto";
 
 message Connect {
+  // Địa chỉ của client gửi thông điệp.
   actor.PID Sender = 1;
 }
 
+//  Thông điệp phản hồi gửi đến client sau khi kết nối thành công.
 message Connected {
+
+  // Thông điệp chào mừng hoặc xác nhận kết nối.
   string Message = 1;
 }
 
+// Thông điệp gửi từ client để gửi một tin nhắn chat.
 message SayRequest {
-  string UserName = 1;
-  string Message = 2;
+  string UserName = 1; // Tên người dùng gửi tin nhắn
+  string Message = 2; //Nội dung tin nhắn.
 }
 
 message SayResponse {
