@@ -42,7 +42,7 @@ PART 4
 - go run cmd/blockchain/index.go createblockchain -address "HIEU"
 - go run cmd/blockchain/index.go printchain
 - go run cmd/blockchain/index.go getbalance -address "HIEU"
-- go run cmd/blockchain/index.go send -from "HIEU" -to "HIEP" -amount 50
+- go run cmd/blockchain/index.go send -from "HIEU" -to "HIEP" - amount 50
 
 PART 5
 
