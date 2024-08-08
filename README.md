@@ -13,6 +13,7 @@
 9. grpc: go get -u google.golang.org/protobuf/reflect/protoreflect
 10. grpc: go get -u google.golang.org/protobuf/runtime/protoimpl
 11. go get -u google.golang.org/grpc
+12. go get -u github.com/google/wire/cmd/wire
 
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 

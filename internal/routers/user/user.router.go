@@ -1,9 +1,7 @@
 package user
 
 import (
-	"github.com/LeVanHieu0509/backend-go/internal/controller"
-	"github.com/LeVanHieu0509/backend-go/internal/repo"
-	"github.com/LeVanHieu0509/backend-go/internal/service"
+	"github.com/LeVanHieu0509/backend-go/internal/wire"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,15 +12,18 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	// Public router
 
 	// this is non dependency
-	ur := repo.NewUserRepo()
-	us := service.NewUserService(ur)
-	userHandleNonDependency := controller.NewUserController(us)
 
-	// this is dependency => use pattern dependency injection => video 18
+	// ur := repo.NewUserRepo()
+	// us := service.NewUserService(ur)
+	// userHandleNonDependency := controller.NewUserController(us)
+
+	// this is dependency => use pattern dependency injection => video 18  Wire Dependency Injection (Kiểm tra or nâng cấp)
+	// Cho phép các module cấp cao tách biệt
+	userController, _ := wire.InitUserRouterHandler()
 
 	userRouterPublic := Router.Group("/user")
 	{
-		userRouterPublic.POST("/register", userHandleNonDependency.Register)
+		userRouterPublic.POST("/register", userController.Register)
 		userRouterPublic.GET("/otp")
 
 	}
