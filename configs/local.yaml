@@ -2,11 +2,11 @@ server:
   port: 8001
   mode: "dev"
 mysql:
-  host: 127.0.0.1
+  host: 14.225.205.90
   port: 3306
-  username: tipjs
-  password: tipjs
-  dbname: shopGo
+  username: levanhieu
+  password: 123123
+  dbname: go_backend_db
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
@@ -18,10 +18,10 @@ logger:
   max_age: 28
   compress: true
 databases:
-  - user: admin
-    password: admin
-    host: localhost
-    dbName: shopDEV
+  - user: levanhieu
+    password: 123123123
+    host: 14.225.205.90
+    dbName: go_backend_db
   - user: admin
     password: admin
     host: localhost

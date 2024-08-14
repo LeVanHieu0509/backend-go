@@ -5,6 +5,7 @@ go 1.22.4
 require gorm.io/driver/mysql v1.5.7
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/Workiva/go-datastructures v1.1.5 // indirect
 	github.com/asynkron/goconsole v0.0.0-20160504192649-bfa12eebf716 // indirect
 	github.com/asynkron/gofun v0.0.0-20220329210725-34fed760f4c2 // indirect
@@ -19,8 +20,11 @@ require (
 	github.com/google/subcommands v1.2.0 // indirect
 	github.com/google/wire v0.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/labstack/echo/v4 v4.12.0 // indirect
+	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/lithammer/shortuuid/v4 v4.0.0 // indirect
 	github.com/lmittmann/tint v1.0.5 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/orcaman/concurrent-map v1.0.0 // indirect
@@ -36,7 +40,9 @@ require (
 	github.com/tklauser/numcpus v0.8.0 // indirect
 	github.com/twmb/murmur3 v1.1.8 // indirect
 	github.com/urfave/cli v1.22.15 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fastjson v1.6.4 // indirect
+	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.opentelemetry.io/otel v1.28.0 // indirect
 	go.opentelemetry.io/otel/exporters/prometheus v0.50.0 // indirect
@@ -49,6 +55,10 @@ require (
 	golang.org/x/tools v0.24.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240730163845-b1a4ccb954bf // indirect
 	google.golang.org/grpc v1.65.0 // indirect
+	gorm.io/datatypes v1.2.1 // indirect
+	gorm.io/gen v0.3.26 // indirect
+	gorm.io/hints v1.1.2 // indirect
+	gorm.io/plugin/dbresolver v1.5.2 // indirect
 )
 
 require (
@@ -73,7 +83,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.0 // indirect
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
-	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/golang/glog v1.2.1 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
@@ -112,10 +122,10 @@ require (
 	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
 	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/gorm v1.25.10 // indirect
+	gorm.io/gorm v1.25.11 // indirect
 )

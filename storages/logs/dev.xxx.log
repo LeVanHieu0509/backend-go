@@ -75,3 +75,7 @@
 {"level":"INFO","time":"2024-07-14T22:15:26.681+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
 {"level":"INFO","time":"2024-07-14T22:15:26.682+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
 {"level":"ERROR","time":"2024-07-17T22:11:47.962+0700","caller":"initialize/mysql.go:16","msg":"Init mysql initialization error","error":"dial tcp 127.0.0.1:3306: connect: connection refused","stacktrace":"github.com/LeVanHieu0509/backend-go/internal/initialize.checkErrorPanic\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/mysql.go:16\ngithub.com/LeVanHieu0509/backend-go/internal/initialize.InitMySql\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/mysql.go:38\ngithub.com/LeVanHieu0509/backend-go/internal/initialize.Run\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/run.go:16\nmain.main\n\t/Users/hieulevan/go/src/go-backend-api/cmd/server/main.go:7\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:271"}
+{"level":"INFO","time":"2024-08-14T15:23:56.239+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-08-14T15:26:55.124+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-08-14T15:28:58.140+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-08-14T15:29:46.591+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
