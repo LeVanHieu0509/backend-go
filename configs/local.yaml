@@ -1,12 +1,21 @@
 server:
   port: 8001
   mode: "dev"
+# mysql:
+#   host: 14.225.205.90
+#   port: 3306
+#   username: levanhieu
+#   password: 123123
+#   dbname: go_backend_db
+#   maxIdleConns: 10
+#   maxOpenConns: 100
+#   connMaxLifetime: 3600
 mysql:
-  host: 14.225.205.90
+  host: mysql_con
   port: 3306
   username: levanhieu
-  password: 123123
-  dbname: go_backend_db
+  password: levanhieu1234
+  dbname: shopdevgo
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
@@ -30,7 +39,7 @@ security:
   jwt:
     key: abc123
 redis:
-  host: 127.0.0.1
+  host: redis_con
   port: 6379
   password: ""
   db: 0

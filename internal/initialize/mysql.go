@@ -50,7 +50,7 @@ func InitMySql() {
 	migrateTables()
 
 	//
-	genTableDao()
+	// genTableDao()
 }
 
 // Hàm: SetPool cấu hình nhóm kết nối MySQL

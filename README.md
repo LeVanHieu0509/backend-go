@@ -84,3 +84,15 @@ Lệnh này sẽ tạo ra hai tệp Go: một cho định nghĩa giao thức và
 --go-grpc_out=.: Chỉ định đầu ra cho mã gRPC từ Protocol Buffers.
 
 protoc --go_out=. --go-grpc_out=. event.proto
+
+### docker
+
+docker build . -t go-backend-api
+docker run -p 8001:8080 go-backend-api
+
+rm ~/.docker/config.json
+docker compose-up -d
+docker build . -t crm.shopdev.com
+docker network create my_network_pro
+docker network connect bridge mysql_con
+docker run --link mysql_con:mysql_con -p 8003:8001 crm.shopdev.com
