@@ -1,0 +1,2 @@
+- Sử dụng SQLC trong go và công ty lớn thì rất là tuyệt
+-

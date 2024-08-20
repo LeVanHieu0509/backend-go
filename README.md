@@ -15,6 +15,7 @@
 11. go get -u google.golang.org/grpc
 12. go get -u github.com/google/wire/cmd/wire
 13. go get -u gorm.io/gen
+14. go get -u github.com/go-sql-driver/mysql
 
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 
