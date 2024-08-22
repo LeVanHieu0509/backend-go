@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  zookeeper:
+    image: quay.io/debezium/zookeeper:2.7
+    container_name: member_zookeeper_container
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
