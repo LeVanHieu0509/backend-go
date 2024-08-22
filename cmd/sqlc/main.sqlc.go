@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	mdb, err := sql.Open("mysql", "levanhieu:levanhieu1234@tcp(127.0.0.1:3306)/shopdevgo")
+	mdb, err := sql.Open("mysql", "levanhieu:levanhieu1234@tcp(127.0.0.1:33060)/shopdevgo")
 
 	if err != nil {
 		panic(err)
