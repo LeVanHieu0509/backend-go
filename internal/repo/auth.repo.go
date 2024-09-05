@@ -1,5 +1,12 @@
 package repo
 
+import (
+	"fmt"
+	"time"
+
+	"github.com/LeVanHieu0509/backend-go/global"
+)
+
 // // 1. sử dụng struct
 // type AuthRepo struct{}
 
@@ -19,25 +26,22 @@ package repo
 
 //Interface
 
-type IUserRepository interface {
-	GetUserByEmail(email string) bool
-	GetUserById(email string) bool
+type IAuthRepository interface {
+	AddOtp(email string, otp int, expirationTime int64) error
 }
 
-type userRepository struct {
+type authRepository struct {
 }
 
 // GetUserById implements IUserRepository.
-func (u *userRepository) GetUserById(email string) bool {
-	panic("unimplemented")
-}
-
-// GetUserByEmail implements IUserRepository.
-func (u *userRepository) GetUserByEmail(email string) bool {
-	panic("unimplemented")
+func (auth *authRepository) AddOtp(email string, otp int, expirationTime int64) error {
+	key := fmt.Sprintf("usr:%s:otp", email)
+	fmt.Println(key)
+	return global.Rdb.SetEx(ctx, key, otp, time.Duration(expirationTime)).Err()
+	// panic("unimplemented")
 }
 
 // Tạo instance mới
-func NewUserRepository() IUserRepository {
-	return &userRepository{}
+func NewAuthRepository() IAuthRepository {
+	return &authRepository{}
 }

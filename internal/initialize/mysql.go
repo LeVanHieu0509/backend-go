@@ -47,7 +47,7 @@ func InitMySql() {
 	SetPool()
 
 	// Gọi hàm migrateTables để tự động di chuyển các bảng cơ sở dữ liệu.
-	migrateTables()
+	// migrateTables()
 
 	//
 	// genTableDao()

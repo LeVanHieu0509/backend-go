@@ -1,7 +1,14 @@
 package service
 
 import (
+	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/LeVanHieu0509/backend-go/internal/repo"
+	"github.com/LeVanHieu0509/backend-go/internal/utils/crypto"
+	"github.com/LeVanHieu0509/backend-go/internal/utils/random"
+	"github.com/LeVanHieu0509/backend-go/internal/utils/sendto"
 	"github.com/LeVanHieu0509/backend-go/pkg/response"
 )
 
@@ -46,18 +53,46 @@ type IUserService interface {
 type userService struct {
 	//Struct UserService có một trường là userRepo thuộc kiểu con trỏ đến struct UserRepo trong package repo.
 	userRepo repo.IUserRepository
+	authRepo repo.IAuthRepository
 }
 
-func NewUserService(userRepo repo.IUserRepository) IUserService {
+func NewUserService(userRepo repo.IUserRepository, authRepo repo.IAuthRepository) IUserService {
 	return &userService{
 		userRepo: userRepo,
+		authRepo: authRepo,
 	}
 }
 
 // Register implements IUserService.
 func (us *userService) Register(email string, purpose string) int {
+	// 0. hashEmail - Không tin ai cả, phải băm cái email này ra và tạo ra 1 kí tự không giống ai đưa vào redis nhắm tăng cường bảo mật
+	hashEmail := crypto.GetHash(email)
+	fmt.Printf("hashEmail::%s", hashEmail)
+
+	// 5. check OTP is available
+	// 6. User spam ....
+
+	// 1. Check email exits in db
 	if us.userRepo.GetUserByEmail(email) {
 		return response.ErrCodeUserHasExists
+	}
+	// 2. Create new OTP
+	otp := random.GenerateSixDigitOtp()
+	if purpose == "TEST_USER" {
+		otp = 123456
+	}
+
+	fmt.Printf("OTP is :::%d\n", otp)
+	// 3. Save OTP in redis with expiration time - check thời gian hết hạn
+	err := us.authRepo.AddOtp(hashEmail, otp, int64(10*time.Minute))
+
+	if err != nil {
+		return response.ErrInvalidOtp
+	}
+	// 4. Send email OTP
+	err = sendto.SendTextEmailOtp([]string{email}, "levanhieu.huflit@gmail.com", strconv.Itoa(otp))
+	if err != nil {
+		return response.ErrSendEmailOtp
 	}
 	return response.ErrCodeSuccess
 }

@@ -12,6 +12,7 @@ import (
 func InitUserRouterHandlerInjection() (*controller.UserController, error) {
 	wire.Build(
 		repo.NewUserRepository,
+		repo.NewAuthRepository,
 		service.NewUserService,
 		controller.NewUserController,
 	)

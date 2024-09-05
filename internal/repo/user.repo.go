@@ -1,23 +1,35 @@
 package repo
 
-// 1. sử dụng struct
-type UserRepo struct{}
+import (
+	"github.com/LeVanHieu0509/backend-go/global"
+	"github.com/LeVanHieu0509/backend-go/internal/model"
+)
 
-// GetUserByEmail implements IUserRepository.
-func (ur *UserRepo) GetUserByEmail(email string) bool {
+type IUserRepository interface {
+	GetUserByEmail(email string) bool
+	GetUserById(email string) bool
+	GetInfoUser() string
+}
+
+type UserRepository struct{}
+
+// Implement the interface methods.
+func (ur *UserRepository) GetUserByEmail(email string) bool {
+	// SELECT * FROM user WHERE email = '??'
+	row := global.Mdb.Table(TableNameGoCrmUser).Where("usr_email=?", email).First(&model.GoCrmUser{}).RowsAffected
+
+	return row != NumberNull
+}
+
+func (ur *UserRepository) GetUserById(email string) bool {
 	panic("unimplemented")
 }
 
-// GetUserById implements IUserRepository.
-func (ur *UserRepo) GetUserById(email string) bool {
-	panic("unimplemented")
-}
-
-// 2. sử dụng con trỏ
-func NewUserRepo() *UserRepo {
-	return &UserRepo{}
-}
-
-func (ur *UserRepo) GetInfoUser() string {
+func (ur *UserRepository) GetInfoUser() string {
 	return "hieu"
+}
+
+// NewUserRepository returns a pointer to UserRepository.
+func NewUserRepository() IUserRepository {
+	return &UserRepository{}
 }

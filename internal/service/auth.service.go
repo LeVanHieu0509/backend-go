@@ -1,14 +1,12 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/LeVanHieu0509/backend-go/internal/repo"
 	ty "github.com/LeVanHieu0509/backend-go/types_custom"
 )
 
 type authService struct {
-	authRepo repo.IUserRepository
+	authRepo repo.IAuthRepository
 }
 
 type IAuthService interface {
@@ -18,7 +16,7 @@ type IAuthService interface {
 	RefreshToken(data ty.SignUpRequest) string
 }
 
-func NewAuthService(userRepo repo.IUserRepository) IAuthService {
+func NewAuthService(userRepo repo.IAuthRepository) IAuthService {
 	return &authService{authRepo: userRepo}
 }
 
@@ -31,14 +29,14 @@ func (auth *authService) Login(data ty.LoginReq) string {
 		4. Lấy cặp key rsa từ database của user đó để gen ra token trả về cho client kèm thông tin
 
 	*/
-	foundUser := auth.authRepo.GetUserByEmail(data.Username)
+	// foundUser := auth.authRepo.GetUserByEmail(data.Username)
 
-	if !foundUser {
-		fmt.Println("User not found")
-		return "0"
-	}
+	// if !foundUser {
+	// 	fmt.Println("User not found")
+	// 	return "0"
+	// }
 
-	fmt.Println("User found:", foundUser)
+	// fmt.Println("User found:", foundUser)
 	return "1"
 }
 

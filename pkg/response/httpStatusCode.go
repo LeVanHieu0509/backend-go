@@ -6,6 +6,8 @@ const (
 	ErrInvalidToken     = 30001 // token invalid
 
 	ErrCodeUserHasExists = 50001 // User has already register
+	ErrInvalidOtp        = 30002
+	ErrSendEmailOtp      = 30003
 )
 
 var msg = map[int]string{
@@ -13,4 +15,6 @@ var msg = map[int]string{
 	ErrCodeParamInvalid:  "Email is invalid",
 	ErrInvalidToken:      "token is invalid",
 	ErrCodeUserHasExists: "user has already register",
+	ErrInvalidOtp:        "OTP Error",
+	ErrSendEmailOtp:      "Fail to send mail OTP",
 }
