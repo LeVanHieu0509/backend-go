@@ -90,7 +90,15 @@ func (us *userService) Register(email string, purpose string) int {
 		return response.ErrInvalidOtp
 	}
 	// 4. Send email OTP
-	err = sendto.SendTextEmailOtp([]string{email}, "levanhieu.huflit@gmail.com", strconv.Itoa(otp))
+	// err = sendto.SendTextEmailOtp([]string{email}, "levanhieu.huflit@gmail.com", strconv.Itoa(otp))
+
+	//5 send template email OTP
+	err = sendto.SendTemplateEmailOtp([]string{email}, "levanhieu.huflit@gmail.com", "otp-auth.mail.html", map[string]interface{}{
+		"otp":         strconv.Itoa(otp),
+		"ttl":         5,
+		"link_verify": "",
+	})
+
 	if err != nil {
 		return response.ErrSendEmailOtp
 	}
