@@ -188,3 +188,10 @@
 {"level":"INFO","time":"2024-09-05T18:10:40.917+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
 {"level":"INFO","time":"2024-09-05T18:10:40.918+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
 {"level":"INFO","time":"2024-09-05T18:10:54.305+0700","caller":"sendto/sendto.go:57","msg":"Send mail to success!"}
+{"level":"INFO","time":"2024-09-06T09:44:35.327+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
+{"level":"ERROR","time":"2024-09-06T09:44:35.404+0700","caller":"initialize/redis.go:29","msg":"Redis initialization Error:","error":"dial tcp [::1]:6379: connect: connection refused","stacktrace":"github.com/LeVanHieu0509/backend-go/internal/initialize.InitRedis\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/redis.go:29\ngithub.com/LeVanHieu0509/backend-go/internal/initialize.Run\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/run.go:17\nmain.main\n\t/Users/hieulevan/go/src/go-backend-api/cmd/server/main.go:7\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:271"}
+{"level":"INFO","time":"2024-09-06T09:44:35.404+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-09-06T09:44:35.617+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":""}
+{"level":"INFO","time":"2024-09-06T09:45:22.109+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-09-06T09:45:22.115+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-09-06T09:45:22.116+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}

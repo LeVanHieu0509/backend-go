@@ -1,24 +1,24 @@
 server:
   port: 8001
   mode: "dev"
-# mysql:
-#   host: 14.225.205.90
-#   port: 3306
-#   username: levanhieu
-#   password: 0869@LevanhieuABC!
-#   dbname: go_backend_db
-#   maxIdleConns: 10
-#   maxOpenConns: 100
-#   connMaxLifetime: 3600
 mysql:
-  host: 127.0.0.1
-  port: 33060
+  host: 14.225.205.90
+  port: 3306
   username: levanhieu
-  password: levanhieu1234
-  dbname: shopdevgo
+  password: 0869@LevanhieuABC!
+  dbname: go_backend_db
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
+# mysql:
+#   host: 127.0.0.1
+#   port: 33060
+#   username: levanhieu
+#   password: levanhieu1234
+#   dbname: shopdevgo
+#   maxIdleConns: 10
+#   maxOpenConns: 100
+#   connMaxLifetime: 3600
 logger:
   log_level: debug
   file_log_name: "./storages/logs/dev.xxx.log"
