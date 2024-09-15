@@ -67,7 +67,6 @@ func NewUserService(userRepo repo.IUserRepository, authRepo repo.IAuthRepository
 func (us *userService) Register(email string, purpose string) int {
 	// 0. hashEmail - Không tin ai cả, phải băm cái email này ra và tạo ra 1 kí tự không giống ai đưa vào redis nhắm tăng cường bảo mật
 	hashEmail := crypto.GetHash(email)
-	fmt.Printf("hashEmail::%s", hashEmail)
 
 	// 5. check OTP is available
 	// 6. User spam ....
