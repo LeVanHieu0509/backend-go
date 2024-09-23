@@ -39,6 +39,7 @@ xây dựng một URL kết nối tới WebSocket của Binance để nhận cá
 
 return: wss://fstream.binance.com/stream?streams=btcusdt@aggTrade/btcusdt@markPrice/btcusdt@depth/ethusdt@aggTrade/ethusdt@markPrice/ethusdt@depth
 */
+
 func createWSEndPoint() string {
 	//Mảng này sẽ lưu trữ các endpoint phụ cho từng loại dữ liệu của từng cặp giao dịch
 	results := []string{}
