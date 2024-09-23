@@ -257,3 +257,7 @@
 {"level":"INFO","time":"2024-09-15T17:04:28.096+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
 {"level":"INFO","time":"2024-09-15T17:04:28.096+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
 {"level":"INFO","time":"2024-09-15T17:04:44.904+0700","caller":"sendto/sendto.go:112","msg":"Send mail to email success!"}
+{"level":"INFO","time":"2024-09-23T14:48:04.613+0700","caller":"initialize/mysql.go:41","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-09-23T14:48:04.614+0700","caller":"initialize/mysqlc.go:38","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-09-23T14:48:04.620+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-09-23T14:48:04.620+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
