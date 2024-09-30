@@ -1,0 +1,9 @@
+@baseUrl=http://localhost:8001/v1/2024
+
+POST {{baseUrl}}/user/login
+Content-Type: application/json
+
+{
+                "email": "levanhieu.huflit@gmail.com",
+                "purpose": "test"
+}

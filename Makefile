@@ -1,31 +1,35 @@
-GOOSE_DBSTRING = "levanhieu:levanhieu1234@tcp(127.0.0.1:33060)/shopdevgo"
+GOOSE_DBSTRING ?= "levanhieu:levanhieu1234@tcp(127.0.0.1:33060)/shopdevgo"
 GOOSE_MIGRATION_DIR ?= sql/schema
+GOOSE_DRIVER ?= mysql
 
 APP_NAME = server
 
 
+docker_build:
+	docker-compose up -d --build
+	docker-compose ps
+docker_stop:
+	docker-compose down
+docker_up:
+	docker-compose up -d
 binancef:
 	go run ./cmd/cli/binancef/main.binancef.go
 dev: 
 	go run ./cmd/${APP_NAME}/main.go
-run:
-	docker compose up -d && go run ./cmd/${APP_NAME}/main.go
-up:
-	docker compose up -d
-down:
-	docker compose down
 
 upse:
-	@GOOSE_DRIVER=mysql GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) up
+	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) up
 
 downse:
-	@GOOSE_DRIVER=mysql GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) down
+	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) down
 
 resetse:
-	@GOOSE_DRIVER=mysql GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) reset
+	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) reset
 
-
-.PHONY: run downse upse resetse
+sqlgen: 
+	sqlc generate
+	
+.PHONY: dev downse upse resetse docker_build docker_stop docker_up
 
 .PHONY: air
 

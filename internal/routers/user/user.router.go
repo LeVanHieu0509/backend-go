@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/LeVanHieu0509/backend-go/internal/controller/account"
 	"github.com/LeVanHieu0509/backend-go/internal/wire"
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,8 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userRouterPublic := Router.Group("/user")
 	{
 		userRouterPublic.POST("/register", userController.Register)
+		userRouterPublic.POST("/login", account.Login.Login)
+
 		userRouterPublic.GET("/otp")
 
 	}
