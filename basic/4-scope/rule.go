@@ -28,7 +28,11 @@ func main() {
 }
 
 // Cách viết if else rút gọn cấu trúc
+// Câu lệnh if trong Go cho phép khai báo và khởi tạo một biến cục bộ ngay bên trong cấu trúc điều kiện if.
 func shortIf() {
+
+	// biến num được khai báo và khởi tạo bằng giá trị ngẫu nhiên từ hàm rand.Intn(3)
+	// Biến num chỉ tồn tại trong khối if-else
 	if num := rand.Intn(3); num == 0 {
 		fmt.Println("Space Adventures")
 	} else if num == 1 {
@@ -42,6 +46,9 @@ func shortIf() {
 
 // Cách viết switch rút gọn cấu trúc
 func shortSwitch() {
+
+	// num được khởi tạo bằng giá trị ngẫu nhiên từ rand.Intn(10)
+	// num chỉ tồn tại trong khối switch và không thể sử dụng bên ngoài khối này.
 	switch num := rand.Intn(10); num {
 	case 0:
 		fmt.Println("Space Adventures")

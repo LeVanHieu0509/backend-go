@@ -42,10 +42,14 @@ func main() {
 	fmt.Println("That is", days, "days of travel at light speed.")
 
 	//-------------------------------------------------
+	// Kết quả của phép tính được thực hiện ngay khi chương trình biên dịch. Máy tính sẽ thực hiện phép tính trên các giá trị trực tiếp.
+
 	const distance = 24000000000000000000 //Việc tính toán các hằng số và hằng số được thực hiện trong quá trình biên dịch thay vì trong khi chương trình đang chạy
 	fmt.Println("Andromeda Galaxy is", 24000000000000000000/299792/86400, "light days away.")
 
 	// dùng hằng số
+	// Đoạn mã thứ hai là cách viết tốt hơn vì nó mang lại tính rõ ràng, dễ bảo trì và tái sử dụng.
+	// Mặc dù có vẻ dài hơn, nhưng nó giúp mã trở nên có cấu trúc và dễ hiểu hơn.
 	const distance2 = 24000000000000000000
 	const lightSpeed = 299792
 	const secondsPerDay = 86400
