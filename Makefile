@@ -17,6 +17,12 @@ binancef:
 dev: 
 	go run ./cmd/${APP_NAME}/main.go
 
+up_by_one: 
+	@GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) up-by-one
+# create migration
+create_migration:
+	@goose -dir=$(GOOSE_MIGRATION_DIR) create $(name) sql
+
 upse:
 	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) up
 

@@ -1,9 +1,9 @@
 version: "2"
 sql:
   - engine: "mysql"
-    queries: "sql/queries"
-    schema: "sql/schema"
+    queries: "sql/queries" # Đường dẫn đến thư mục chứa các câu truy vấn SQL, tương tác với cơ sở dữ liệu
+    schema: "sql/schema" # định nghĩa schema (lược đồ) của cơ sở dữ liệu
     gen:
       go:
         package: "database"
-        out: "internal/database"
+        out: "internal/database" # việc tạo mã nguồn (code generation) từ các định nghĩa và câu truy vấn SQL

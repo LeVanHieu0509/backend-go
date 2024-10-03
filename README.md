@@ -70,31 +70,39 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 # Thêm vào tệp cấu hình shell (chỉ cần làm một lần)
 
-echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
-source ~/.bashrc # hoặc ~/.zshrc, ~/.profile tùy thuộc vào shell bạn sử dụng
+1. echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
+2. source ~/.bashrc # hoặc ~/.zshrc, ~/.profile tùy thuộc vào shell bạn sử dụng
 
 # Kiểm tra cài đặt
 
-which protoc-gen-go
-which protoc-gen-go-grpc
+1. which protoc-gen-go
+2. which protoc-gen-go-grpc
 
 # Tạo mã Go từ tệp .proto
 
 Lệnh này sẽ tạo ra hai tệp Go: một cho định nghĩa giao thức và một cho dịch vụ gRPC.
 
---go_out=.: Chỉ định đầu ra cho mã Go từ Protocol Buffers.
---go-grpc_out=.: Chỉ định đầu ra cho mã gRPC từ Protocol Buffers.
-
-protoc --go_out=. --go-grpc_out=. event.proto
+1. --go_out=.: Chỉ định đầu ra cho mã Go từ Protocol Buffers.
+2. --go-grpc_out=.: Chỉ định đầu ra cho mã gRPC từ Protocol Buffers.
+3. protoc --go_out=. --go-grpc_out=. event.proto
 
 ### docker
 
-docker build . -t go-backend-api
-docker run -p 8001:8080 go-backend-api
+1. docker build . -t go-backend-api
+2. docker run -p 8001:8080 go-backend-api
 
-rm ~/.docker/config.json
-docker compose-up -d
-docker build . -t crm.shopdev.com
-docker network create my_network_pro
-docker network connect bridge mysql_con
-docker run --link mysql_con:mysql_con -p 8003:8001 crm.shopdev.com
+3. rm ~/.docker/config.json
+4. docker compose-up -d
+5. docker build . -t crm.shopdev.com
+6. docker network create my_network_pro
+7. docker network connect bridge mysql_con
+8. docker run --link mysql_con:mysql_con -p 8003:8001 crm.shopdev.com
+
+### SQLC
+
+- Sau khi tạo bảng database -> dùng sqlc để combine ra goose
+
+1. Tạo ra file sqlc trong schema: make create_migration name=0001_pre_go_acc_user_verify_9999
+2. Migration từ code qua db: make up_by_one
+3. Sau khi tạo xong DB rồi thì sẽ viết cho từng func để và định nghĩa nó trong file querie.
+4. Sqlc sẽ combind ra code của goose: make sqlgen
