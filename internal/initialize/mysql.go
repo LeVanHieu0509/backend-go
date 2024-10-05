@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/LeVanHieu0509/backend-go/global"
-	"github.com/LeVanHieu0509/backend-go/internal/model"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gen"
@@ -79,9 +78,9 @@ func migrateTables() {
 	// Mỗi file trong gói po tương ứng với một bảng trong cơ sở dữ liệu, với mỗi trường trong file đại diện cho một cột trong bảng.
 
 	err := global.Mdb.AutoMigrate(
-		// &po.User{},
-		// &po.Role{},
-		&model.GoCrmUser{}, // có thể switch qua switch lại giữ go và mysql. Nên ưu tiên làm việc bên mysql
+	// &po.User{},
+	// &po.Role{},
+	// &model.GoCrmUser{}, // có thể switch qua switch lại giữ go và mysql. Nên ưu tiên làm việc bên mysql
 	)
 
 	if err != nil {

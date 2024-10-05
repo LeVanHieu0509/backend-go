@@ -4,6 +4,7 @@ POST {{baseUrl}}/user/register
 Content-Type: application/json
 
 {
-                "email": "levanhieu.huflit@gmail.com",
-                "purpose": "test"
+    "verify_key": "levanhieu.hex@gmail.com",
+    "verify_purpose": "TEST_USER",
+    "verify_type": 1
 }

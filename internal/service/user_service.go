@@ -1,6 +1,10 @@
 package service
 
-import "context"
+import (
+	"context"
+
+	"github.com/LeVanHieu0509/backend-go/internal/model"
+)
 
 // Các phương thức này đều nhận context.Context (biến ctx), giúp kiểm soát luồng xử lý, truyền dữ liệu và timeout giữa các luồng
 
@@ -10,7 +14,7 @@ type (
 	//...interface
 	IUserLogin interface {
 		Login(ctx context.Context) error
-		Register(ctx context.Context) error
+		Register(ctx context.Context, in *model.RegisterInput) (codeResult int, err error)
 		VerifyOTP(ctx context.Context) error
 		UpdatePassword(ctx context.Context) error
 	}

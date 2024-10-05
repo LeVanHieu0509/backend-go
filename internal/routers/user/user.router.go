@@ -2,7 +2,6 @@ package user
 
 import (
 	"github.com/LeVanHieu0509/backend-go/internal/controller/account"
-	"github.com/LeVanHieu0509/backend-go/internal/wire"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,11 +19,11 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 
 	// this is dependency => use pattern dependency injection => video 18  Wire Dependency Injection (Kiểm tra or nâng cấp)
 	// Cho phép các module cấp cao tách biệt
-	userController, _ := wire.InitUserRouterHandler()
+	// userController, _ := wire.InitUserRouterHandler()
 
 	userRouterPublic := Router.Group("/user")
 	{
-		userRouterPublic.POST("/register", userController.Register)
+		userRouterPublic.POST("/register", account.Login.Register)
 		userRouterPublic.POST("/login", account.Login.Login)
 
 		userRouterPublic.GET("/otp")
