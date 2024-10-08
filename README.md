@@ -17,6 +17,8 @@
 13. go get -u gorm.io/gen
 14. go get -u github.com/go-sql-driver/mysql
 15. go install github.com/pressly/goose/v3/cmd/goose@latest
+16. go install github.com/swaggo/swag/cmd/swag@latest
+17. go get -u github.com/swaggo/swag
 
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 

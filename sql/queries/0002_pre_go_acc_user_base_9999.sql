@@ -21,3 +21,13 @@ INSERT INTO pre_go_acc_user_base_9999 (
 ) VALUES (
     ?, ?, ?, NOW(), NOW()
 );
+
+-- name: LoginUserBase :exec
+UPDATE pre_go_acc_user_base_9999
+SET user_login_time = NOW(), user_login_ip = ?
+WHERE user_account = ? AND user_password = ?;
+
+-- name: LogoutUserBase :exec
+UPDATE pre_go_acc_user_base_9999
+SET user_logout_time = NOW()
+WHERE user_account = ?;

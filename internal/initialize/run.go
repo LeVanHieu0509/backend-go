@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"github.com/LeVanHieu0509/backend-go/global"
+	"github.com/gin-gonic/gin"
 )
 
-func Run() {
+func Run() *gin.Engine {
 	// load configuration
 	LoadConfig()
 	m := global.Config.Mysql
@@ -19,5 +20,6 @@ func Run() {
 	InitRedis()
 	InitKafka()
 	r := InitRouter()
-	r.Run(":8001")
+
+	return r
 }

@@ -11,6 +11,11 @@ type ResponseData struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
+type ErrorResponseData struct {
+	Code   int         `json:"code"`
+	Err    string      `json:"error"`
+	Detail interface{} `json:"detail"`
+}
 
 // success response
 func SuccessResponse(ctx *gin.Context, code int, data interface{}) {
