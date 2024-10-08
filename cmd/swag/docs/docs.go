@@ -34,7 +34,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "account management"
+                    "User Registration"
                 ],
                 "summary": "Show an account",
                 "parameters": [

@@ -28,7 +28,7 @@ func (c *cUserLogin) Login(ctx *gin.Context) {
 // User Registration documentation
 // @Summary      Show an account
 // @Description  get user register
-// @Tags         account management
+// @Tags         User Registration
 // @Accept       json
 // @Produce      json
 // @Param        payload body model.RegisterInput true "payload"

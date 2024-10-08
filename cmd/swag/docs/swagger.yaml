@@ -67,7 +67,7 @@ paths:
             $ref: '#/definitions/response.ErrorResponseData'
       summary: Show an account
       tags:
-      - account management
+      - User Registration
 securityDefinitions:
   BasicAuth:
     type: basic
