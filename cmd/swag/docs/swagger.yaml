@@ -9,6 +9,13 @@ definitions:
       verify_type:
         type: integer
     type: object
+  model.VerifyInput:
+    properties:
+      verify_code:
+        type: string
+      verify_key:
+        type: string
+    type: object
   response.ErrorResponseData:
     properties:
       code:
@@ -68,6 +75,32 @@ paths:
       summary: Show an account
       tags:
       - User Registration
+  /user/verify_account:
+    post:
+      consumes:
+      - application/json
+      description: user VerifyOTP
+      parameters:
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponseData'
+      summary: Show an account
+      tags:
+      - User VerifyOTP
 securityDefinitions:
   BasicAuth:
     type: basic

@@ -52,3 +52,30 @@ func (c *cUserLogin) Register(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, response.ErrCodeSuccess, nil)
 }
+
+// User VerifyOTP documentation
+// @Summary      Show an account
+// @Description  user VerifyOTP
+// @Tags         User VerifyOTP
+// @Accept       json
+// @Produce      json
+// @Param        payload body model.VerifyInput true "payload"
+// @Success      200  {object}  response.ResponseData
+// @Failure      500  {object}  response.ErrorResponseData
+// @Router       /user/verify_account [post]
+func (c *cUserLogin) VerifyOTP(ctx *gin.Context) {
+	var params model.VerifyInput
+
+	if err := ctx.ShouldBindJSON(&params); err != nil {
+		response.ErrorResponse(ctx, response.ErrCodeParamInvalid, err.Error())
+
+		return
+	}
+	result, err := service.UserLogin().VerifyOTP(ctx, &params)
+
+	if err != nil {
+		response.ErrorResponse(ctx, response.ErrInvalidOtp, err.Error())
+	}
+
+	response.SuccessResponse(ctx, response.ErrCodeSuccess, result)
+}
