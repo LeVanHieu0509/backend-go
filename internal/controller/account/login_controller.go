@@ -15,14 +15,16 @@ var Login = new(cUserLogin)
 type cUserLogin struct {
 }
 
-func (c *cUserLogin) Login(ctx *gin.Context) {
-	err := service.UserLogin().Login(ctx)
+func (c *cUserLogin) Login(ctx *gin.Context, in model.LoginInput) (codeResult int, out model.LoginOutput, err error) {
+	// User login
 
 	if err != nil {
 		response.ErrorResponse(ctx, response.ErrCodeParamInvalid, err.Error())
 	}
 
 	response.SuccessResponse(ctx, response.ErrCodeSuccess, nil)
+
+	return 200, out, nil
 }
 
 // User Registration documentation

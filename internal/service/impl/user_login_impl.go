@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
@@ -33,8 +34,54 @@ func NewUserLoginImpl(r *database.Queries) *sUserLogin {
 }
 
 // Implement the IUserLogin interface here
-func (s *sUserLogin) Login(ctx context.Context) error {
-	return nil
+func (s *sUserLogin) Login(ctx context.Context, in model.LoginInput) (codeResult int, out model.LoginOutput, err error) {
+	//1. Logic login
+	userBase, err := s.r.GetOneUserInfo(ctx, in.UserAccount)
+
+	if err != nil {
+		return response.ErrCodeAuthFailed, out, err
+	}
+
+	//2. check match pass
+	if !crypto.MatchingPassword(userBase.UserPassword, in.UserPassword, userBase.UserSalt) {
+		return response.ErrCodeAuthFailed, out, fmt.Errorf(" Does not match password")
+	}
+
+	//3. check two-factor authentication
+
+	//4. update status login -> tracking người dùng
+
+	go s.r.LoginUserBase(ctx, database.LoginUserBaseParams{
+		UserLoginIp:  sql.NullString{String: "127.0.0.1", Valid: true},
+		UserAccount:  in.UserAccount,
+		UserPassword: in.UserPassword, // Ko cần
+	})
+
+	subToken := utils.GenerateCliTokenUUID(int(userBase.UserID))
+	log.Println("subToken:", subToken)
+
+	//6. Get user info table
+	infoUser, err := s.r.GetUser(ctx, uint64(userBase.UserID))
+	if err != nil {
+		return response.ErrCodeAuthFailed, out, err
+	}
+
+	//7. convert to json
+	infoUserJson, err := json.Marshal(infoUser)
+	if err != nil {
+		return response.ErrCodeAuthFailed, out, fmt.Errorf("Convert to json failed")
+	}
+
+	//8. Give info user json to redis with key = subToken
+	err = global.Rdb.Set(ctx, subToken, infoUserJson, time.Duration(consts.TIME_OTP_REGISTER)*time.Minute).Err()
+
+	if err != nil {
+		return response.ErrCodeAuthFailed, out, err
+	}
+
+	//9. Create token and refresh token
+
+	return 200, out, nil
 }
 
 func (s *sUserLogin) Register(ctx context.Context, in *model.RegisterInput) (codeResult int, err error) {
