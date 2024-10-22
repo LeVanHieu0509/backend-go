@@ -26,6 +26,7 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouterPublic.POST("/register", account.Login.Register)
 		userRouterPublic.POST("/verify_account", account.Login.VerifyOTP)
 		userRouterPublic.POST("/login", account.Login.Login)
+		userRouterPublic.POST("/update_pass_register", account.Login.UpdatePasswordRegister)
 
 		userRouterPublic.GET("/otp")
 

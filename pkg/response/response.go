@@ -28,9 +28,13 @@ func SuccessResponse(ctx *gin.Context, code int, data interface{}) {
 }
 
 func ErrorResponse(ctx *gin.Context, code int, message string) {
+	// message == "" set msg[code]
+	if message == "" {
+		message = msg[code]
+	}
 	ctx.JSON(http.StatusOK, ResponseData{
 		Code:    code,
-		Message: msg[code],
+		Message: message,
 		Data:    nil,
 	})
 }
