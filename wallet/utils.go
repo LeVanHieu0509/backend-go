@@ -9,5 +9,6 @@ func Base58Encode(input []byte) []byte {
 
 func Base58Decode(input []byte) []byte {
 	decode := base58.Decode(string(input[:]))
+
 	return decode
 }

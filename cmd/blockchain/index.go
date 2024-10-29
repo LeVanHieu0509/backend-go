@@ -277,11 +277,17 @@ func main() {
 	// cli.run()
 
 	//part 4
-	defer os.Exit(0)
-	cli := CommandLine{}
-	cli.run()
+	// defer os.Exit(0)
+	// cli := CommandLine{}
+	// cli.run()
 
-	// w := wallet.MakeWallet()
-	// w.Address()
+	w := wallet.MakeWallet()
+	w.Address()
 
 }
+
+/*
+pub key: 564d357eb401799a8742cbf4e71cfdf4dbf57e1903da9f47ca7568d4fdc5b8aeff528563ab9c1ca8b8d8d768efd0dd037af7b6913704e459cb26dbb2ad0ad76f
+pub hash: 890d640e2bc200e46c6a281761fe652cf877efbe
+address:: 314456666368424c53536a744e644832717a48586f69726a5639656966484850736b
+*/
