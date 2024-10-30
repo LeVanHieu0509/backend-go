@@ -15,6 +15,7 @@ import (
 	"github.com/LeVanHieu0509/backend-go/internal/database"
 	"github.com/LeVanHieu0509/backend-go/internal/model"
 	"github.com/LeVanHieu0509/backend-go/internal/utils"
+	"github.com/LeVanHieu0509/backend-go/internal/utils/auth"
 	"github.com/LeVanHieu0509/backend-go/internal/utils/crypto"
 	"github.com/LeVanHieu0509/backend-go/internal/utils/random"
 	"github.com/LeVanHieu0509/backend-go/internal/utils/sendto"
@@ -34,7 +35,7 @@ func NewUserLoginImpl(r *database.Queries) *sUserLogin {
 }
 
 // Implement the IUserLogin interface here
-func (s *sUserLogin) Login(ctx context.Context, in model.LoginInput) (codeResult int, out model.LoginOutput, err error) {
+func (s *sUserLogin) Login(ctx context.Context, in *model.LoginInput) (codeResult int, out model.LoginOutput, err error) {
 	//1. Logic login
 	userBase, err := s.r.GetOneUserInfo(ctx, in.UserAccount)
 
@@ -80,6 +81,11 @@ func (s *sUserLogin) Login(ctx context.Context, in model.LoginInput) (codeResult
 	}
 
 	//9. Create token and refresh token
+	out.Token, err = auth.CreateToken(subToken)
+
+	if err != nil {
+		return
+	}
 
 	return 200, out, nil
 }

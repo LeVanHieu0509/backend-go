@@ -15,16 +15,32 @@ var Login = new(cUserLogin)
 type cUserLogin struct {
 }
 
-func (c *cUserLogin) Login(ctx *gin.Context, in model.LoginInput) (codeResult int, out model.LoginOutput, err error) {
+// User Login documentation
+// @Summary      User Login
+// @Description  get user login
+// @Tags         User Login
+// @Accept       json
+// @Produce      json
+// @Param        payload body model.LoginInput true "payload"
+// @Success      200  {object}  response.ResponseData
+// @Failure      500  {object}  response.ErrorResponseData
+// @Router       /user/login [post]
+func (c *cUserLogin) Login(ctx *gin.Context) {
 	// User login
+	var params model.LoginInput
+
+	if err := ctx.ShouldBindJSON(&params); err != nil {
+		response.ErrorResponse(ctx, response.ErrCodeParamInvalid, err.Error())
+		return
+	}
+
+	codeRs, dataRs, err := service.UserLogin().Login(ctx, &params)
 
 	if err != nil {
 		response.ErrorResponse(ctx, response.ErrCodeParamInvalid, err.Error())
 	}
 
-	response.SuccessResponse(ctx, response.ErrCodeSuccess, nil)
-
-	return 200, out, nil
+	response.SuccessResponse(ctx, codeRs, dataRs)
 }
 
 // User Registration documentation
