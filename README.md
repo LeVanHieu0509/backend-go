@@ -109,3 +109,5 @@ Lệnh này sẽ tạo ra hai tệp Go: một cho định nghĩa giao thức và
 2. Migration từ code qua db: make up_by_one
 3. Sau khi tạo xong DB rồi thì sẽ viết cho từng func để và định nghĩa nó trong file querie.
 4. Sqlc sẽ combind ra code của goose: make sqlgen
+
+5. Nếu thêm 1 column thì cần phải tạo ra 1 migration

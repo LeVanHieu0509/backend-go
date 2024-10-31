@@ -61,26 +61,26 @@ func (s *sUserLogin) Login(ctx context.Context, in *model.LoginInput) (codeResul
 	subToken := utils.GenerateCliTokenUUID(int(userBase.UserID))
 	log.Println("subToken:", subToken)
 
-	//6. Get user info table
+	//5. Get user info table
 	infoUser, err := s.r.GetUser(ctx, uint64(userBase.UserID))
 	if err != nil {
 		return response.ErrCodeAuthFailed, out, err
 	}
 
-	//7. convert to json
+	//6. convert to json
 	infoUserJson, err := json.Marshal(infoUser)
 	if err != nil {
 		return response.ErrCodeAuthFailed, out, fmt.Errorf("Convert to json failed")
 	}
 
-	//8. Give info user json to redis with key = subToken
+	//7. Give info user json to redis with key = subToken
 	err = global.Rdb.Set(ctx, subToken, infoUserJson, time.Duration(consts.TIME_OTP_REGISTER)*time.Minute).Err()
 
 	if err != nil {
 		return response.ErrCodeAuthFailed, out, err
 	}
 
-	//9. Create token and refresh token
+	//8. Create token and refresh token
 	out.Token, err = auth.CreateToken(subToken)
 
 	if err != nil {
@@ -280,3 +280,17 @@ func (s *sUserLogin) UpdatePassword(ctx context.Context, token string, password 
 
 	return int(user_id), nil
 }
+
+// ------------- START TWO FACTOR AUTHENTICATION ------------------- //
+func (s *sUserLogin) IsTwoFactorEnable(ctx context.Context, userId int) (codeResult int, rs bool, err error) {
+
+	return 200, true, nil
+}
+func (s *sUserLogin) SetupTwoFactorAuth(ctx context.Context, in *model.SetupTwoFactorAuthInput) (codeResult int, err error) {
+	return 200, nil
+}
+func (s *sUserLogin) VerifyTwoFactorAuth(ctx context.Context, in *model.VerifyTwoFactorAuthInput) (codeResult int, err error) {
+	return 200, nil
+}
+
+// ------------- END TWO FACTOR AUTHENTICATION ------------------- //

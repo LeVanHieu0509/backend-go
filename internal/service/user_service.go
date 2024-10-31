@@ -17,6 +17,11 @@ type (
 		Register(ctx context.Context, in *model.RegisterInput) (codeResult int, err error)
 		VerifyOTP(ctx context.Context, in *model.VerifyInput) (out model.VerifyOTPOutput, err error)
 		UpdatePassword(ctx context.Context, token string, password string) (userId int, err error)
+
+		//two-factor authentication
+		IsTwoFactorEnable(ctx context.Context, userId int) (codeResult int, rs bool, err error)
+		SetupTwoFactorAuth(ctx context.Context, in *model.SetupTwoFactorAuthInput) (codeResult int, err error)
+		VerifyTwoFactorAuth(ctx context.Context, in *model.VerifyTwoFactorAuthInput) (codeResult int, err error)
 	}
 
 	IUserInfo interface {
