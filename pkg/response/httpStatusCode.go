@@ -13,16 +13,20 @@ const (
 
 	ErrCodeOtpNotExist      = 60009
 	ErrCodeUserOtpNotExists = 60008
+
+	// Two factor authentication
+	ErrCodeTwoFactorAuthSetupFailed = 80001
 )
 
 var msg = map[int]string{
-	ErrCodeSuccess:          "success",
-	ErrCodeParamInvalid:     "Email is invalid",
-	ErrInvalidToken:         "token is invalid",
-	ErrCodeUserHasExists:    "user has already register",
-	ErrInvalidOtp:           "OTP Error",
-	ErrSendEmailOtp:         "Fail to send mail OTP",
-	ErrCodeOtpNotExist:      "Otp Not Exist but not register",
-	ErrCodeUserOtpNotExists: "User Otp Not Exists",
-	ErrCodeAuthFailed:       "Authentication failed",
+	ErrCodeSuccess:                  "success",
+	ErrCodeParamInvalid:             "Email is invalid",
+	ErrInvalidToken:                 "token is invalid",
+	ErrCodeUserHasExists:            "user has already register",
+	ErrInvalidOtp:                   "OTP Error",
+	ErrSendEmailOtp:                 "Fail to send mail OTP",
+	ErrCodeOtpNotExist:              "Otp Not Exist but not register",
+	ErrCodeUserOtpNotExists:         "User Otp Not Exists",
+	ErrCodeAuthFailed:               "Authentication failed",
+	ErrCodeTwoFactorAuthSetupFailed: "Two Factor Auth Setup Failed",
 }

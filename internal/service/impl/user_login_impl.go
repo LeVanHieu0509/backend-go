@@ -287,7 +287,36 @@ func (s *sUserLogin) IsTwoFactorEnable(ctx context.Context, userId int) (codeRes
 	return 200, true, nil
 }
 func (s *sUserLogin) SetupTwoFactorAuth(ctx context.Context, in *model.SetupTwoFactorAuthInput) (codeResult int, err error) {
-	return 200, nil
+	//1. Check isTwoFactorEnable -> true return
+
+	isTwoFactorAuth, err := s.r.IsTwoFactorEnabled(ctx, in.UserId)
+
+	if err != nil {
+		return response.ErrCodeTwoFactorAuthSetupFailed, err
+	}
+
+	if isTwoFactorAuth > 0 {
+		return response.ErrCodeTwoFactorAuthSetupFailed, fmt.Errorf("Two factor authentication is already enabled")
+	}
+
+	//2. create new type authentication
+	err = s.r.EnableTwoFactorTypeEmail(ctx, database.EnableTwoFactorTypeEmailParams{
+		UserID:            in.UserId,
+		TwoFactorAuthType: database.PreGoAccUserTwoFactor9999TwoFactorAuthTypeEMAIL,
+		TwoFactorEmail:    sql.NullString{String: in.TwoFactorEmail, Valid: true},
+	})
+
+	if err != nil {
+		return response.ErrCodeTwoFactorAuthSetupFailed, err
+	}
+
+	//3. Send OTP to in.Two Factor Email
+	keyUserTwoFactor := crypto.GetHash("2fa" + strconv.Itoa(int(in.UserId)))
+
+	//4. save otp in cache
+	go global.Rdb.Set(ctx, keyUserTwoFactor, "123456", time.Duration(consts.TIME_OTP_REGISTER)*time.Minute).Err()
+
+	return response.ErrCodeSuccess, nil
 }
 func (s *sUserLogin) VerifyTwoFactorAuth(ctx context.Context, in *model.VerifyTwoFactorAuthInput) (codeResult int, err error) {
 	return 200, nil
