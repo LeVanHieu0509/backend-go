@@ -158,3 +158,5 @@ func main() {
 	r.Run(":8999")
 
 }
+
+// curl -X POST "http://localhos/localhost:8999/action/stock?msg=HPG&type=MUA"

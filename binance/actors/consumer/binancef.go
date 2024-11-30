@@ -31,7 +31,7 @@ Việc sử dụng thư viện actor giúp mã dễ dàng mở rộng và quản
 const wsEndpoint = "wss://fstream.binance.com/stream?streams="
 
 // Mảng các cặp giao dịch mà bạn muốn theo dõi. Trong trường hợp này là btcusdt và ethusdt.
-var symbols = []string{"btcusdt"}
+var symbols = []string{"peopleusdt"}
 
 /*
 xây dựng một URL kết nối tới WebSocket của Binance để nhận các loại dữ liệu khác nhau

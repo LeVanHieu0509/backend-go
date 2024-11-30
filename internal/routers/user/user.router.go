@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/LeVanHieu0509/backend-go/internal/controller/account"
+	"github.com/LeVanHieu0509/backend-go/internal/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,12 +35,12 @@ func (pr *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 
 	// Private router
 	userRouterPrivate := Router.Group("/user")
-	userRouterPrivate.Use() //Limiter
-	userRouterPrivate.Use() //Authentication
-	userRouterPrivate.Use() //Permission
+	userRouterPrivate.Use(middlewares.AuthMiddleware()) //Limiter
+	userRouterPrivate.Use()                             //Authentication
+	userRouterPrivate.Use()                             //Permission
 
 	{
 		userRouterPrivate.GET("/get_info")
-
+		userRouterPrivate.POST("/two-factor/setup", account.TwoFA.SetupTwoFactorAuth)
 	}
 }

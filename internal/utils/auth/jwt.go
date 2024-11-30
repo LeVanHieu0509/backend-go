@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"log"
 	"time"
 
 	"github.com/LeVanHieu0509/backend-go/global"
@@ -61,4 +62,40 @@ func CreateToken(uuidToken string) (string, error) {
 		},
 	})
 
+}
+
+func ParseJwtTokenSubject(token string) (*jwt.StandardClaims, error) {
+	tokenClaims, err := jwt.ParseWithClaims(token, &jwt.StandardClaims{}, func(jwtToken *jwt.Token) (interface{}, error) {
+		// để trả về khóa bí mật dùng kiểm tra chữ ký token.
+		return []byte(global.Config.JWT.API_SECRET_KEY), nil
+	})
+
+	// Kiểm tra xem token đã được phân tích thành công chưa.
+	if tokenClaims != nil {
+		// Lấy thông tin payload (claims) từ token.
+		if claims, ok := tokenClaims.Claims.(*jwt.StandardClaims); ok && tokenClaims.Valid {
+			return claims, nil
+		}
+	}
+
+	return nil, err
+
+}
+
+func VerifyTokenSubject(token string) (*jwt.StandardClaims, error) {
+	// Phân tích và lấy claims từ token
+	claims, err := ParseJwtTokenSubject(token)
+
+	log.Println(err)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Token đã hết hạn chưa (exp)?
+	if err = claims.Valid(); err != nil {
+		return nil, err
+	}
+
+	return claims, nil
 }

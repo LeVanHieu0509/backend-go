@@ -4,6 +4,8 @@ const (
 	EMAIL  int = 1
 	MOBILE int = 2
 
-	TIME_OTP_REGISTER int    = 1
-	HOST_EMAIL        string = "levanhieu.workspace@gmail.com"
+	TIME_OTP_REGISTER     int = 1
+	TIME_2FA_OTP_REGISTER int = 10
+
+	HOST_EMAIL string = "levanhieu.workspace@gmail.com"
 )
