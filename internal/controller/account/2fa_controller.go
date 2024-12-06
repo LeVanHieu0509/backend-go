@@ -52,3 +52,42 @@ func (c *sUser2FA) SetupTwoFactorAuth(ctx *gin.Context) {
 
 	//2. get userId from uuid(token) when login success
 }
+
+// User Verify Two Factor Authentication documentation
+// @Summary      Verify Two Factor Authentication
+// @Description  Verify Two Factor Authentication
+// @Tags         account 2fa
+// @Accept       json
+// @Produce      json
+// @Param        Authorization header string true "Authorization token"
+// @Param        payload body model.VerifyTwoFactorAuthInput true "payload"
+// @Success      200  {object}  response.ResponseData
+// @Failure      500  {object}  response.ErrorResponseData
+// @Router       /user/two-factor/verify [post]
+func (c *sUser2FA) VerifyTwoFactorAuth(ctx *gin.Context) {
+	var params model.VerifyTwoFactorAuthInput
+
+	if err := ctx.ShouldBindJSON(&params); err != nil {
+		response.ErrorResponse(ctx, response.ErrCodeTwoFactorAuthSetupFailed, "Missing or invalid set up two factor auth parameter")
+
+		return
+	}
+
+	userId, err := context.GetUserIdFromUUID(ctx.Request.Context())
+
+	if err != nil {
+		response.ErrorResponse(ctx, response.ErrCodeTwoFactorAuthSetupFailed, "UserId is not invalid")
+		return
+	}
+
+	params.UserId = uint32(userId)
+	codeResult, err := service.UserLogin().VerifyTwoFactorAuth(ctx, &params)
+
+	if err != nil {
+		response.ErrorResponse(ctx, response.ErrCodeTwoFactorAuthSetupFailed, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, codeResult, nil)
+
+}

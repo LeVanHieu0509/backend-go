@@ -151,6 +151,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/two-factor/verify": {
+            "post": {
+                "description": "Verify Two Factor Authentication",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account 2fa"
+                ],
+                "summary": "Verify Two Factor Authentication",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyTwoFactorAuthInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/user/update_pass_register": {
             "post": {
                 "description": "user UpdatePasswordRegister",
@@ -291,6 +338,17 @@ const docTemplate = `{
                 },
                 "verify_key": {
                     "type": "string"
+                }
+            }
+        },
+        "model.VerifyTwoFactorAuthInput": {
+            "type": "object",
+            "properties": {
+                "two_factor_code": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },

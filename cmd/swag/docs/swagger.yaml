@@ -39,6 +39,13 @@ definitions:
       verify_key:
         type: string
     type: object
+  model.VerifyTwoFactorAuthInput:
+    properties:
+      two_factor_code:
+        type: string
+      user_id:
+        type: integer
+    type: object
   response.ErrorResponseData:
     properties:
       code:
@@ -153,6 +160,37 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponseData'
       summary: Setup Two Factor Authentication
+      tags:
+      - account 2fa
+  /user/two-factor/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verify Two Factor Authentication
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyTwoFactorAuthInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponseData'
+      summary: Verify Two Factor Authentication
       tags:
       - account 2fa
   /user/update_pass_register:

@@ -24,6 +24,12 @@ Việc sử dụng thư viện actor giúp mã dễ dàng mở rộng và quản
 
 //22p: https://www.youtube.com/watch?v=16kAjS2lNAs
 
+// 1. Add coin
+// 2. % theo 1 tiếng tính từ giá cuối cùng tới giá 1 tiếng.
+// 3. check theo 3-4 nến giảm 5% thì ping về telegram
+// 4. Ping lên giá nào có lệnh bán lớn ở mức giá nào
+//
+
 // when volum > x and marketPrice > x and OpenInterest > x -> alert me
 // bot and algo makers (tự động hoá quá trình giao dịch) and webhook or subscribe WS (đăng kí dựa trên 1 điều kiện)
 
@@ -31,7 +37,7 @@ Việc sử dụng thư viện actor giúp mã dễ dàng mở rộng và quản
 const wsEndpoint = "wss://fstream.binance.com/stream?streams="
 
 // Mảng các cặp giao dịch mà bạn muốn theo dõi. Trong trường hợp này là btcusdt và ethusdt.
-var symbols = []string{"peopleusdt"}
+var symbols = []string{"zkusdt"}
 
 /*
 xây dựng một URL kết nối tới WebSocket của Binance để nhận các loại dữ liệu khác nhau
@@ -114,7 +120,7 @@ func (a *Binancef) wsLoop() {
 		stream := v.GetStringBytes("stream")
 		symbol, kind := splitStream(string(stream))
 		data := v.Get("data")
-
+		fmt.Println("data", data)
 		// Kiểm tra nếu loại thông điệp nhận được là aggTrade.
 		if kind == "aggTrade" {
 			// convert data difficult => data ez

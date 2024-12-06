@@ -15,7 +15,8 @@ const (
 	ErrCodeUserOtpNotExists = 60008
 
 	// Two factor authentication
-	ErrCodeTwoFactorAuthSetupFailed = 80001
+	ErrCodeTwoFactorAuthSetupFailed  = 80001
+	ErrCodeTwoFactorAuthVerifyFailed = 80002
 )
 
 var msg = map[int]string{
