@@ -13,9 +13,9 @@ server:
 mysql:
   host: 127.0.0.1
   port: 33060
-  username: levanhieu
-  password: levanhieu1234
-  dbname: shopdevgo
+  username: root
+  password: 123abc
+  dbname: taphoa-db
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
