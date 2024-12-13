@@ -20,6 +20,7 @@
 16. go install github.com/swaggo/swag/cmd/swag@latest
 17. go get -u github.com/swaggo/swag
 18. go get -u github.com/golang-jwt/jwt
+19. rate-limiter: go get github.com/ulule/limiter/v3@v3.11.2
 
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 

@@ -578,3 +578,35 @@
 {"level":"INFO","time":"2024-12-06T17:35:53.554+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
 {"level":"INFO","time":"2024-12-06T17:35:53.555+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
 {"level":"INFO","time":"2024-12-06T17:36:00.476+0700","caller":"sendto/sendto.go:59","msg":"Send mail to email success!"}
+{"level":"INFO","time":"2024-12-07T16:25:51.221+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:25:51.222+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:25:51.228+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:25:51.229+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T16:31:41.532+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:31:41.533+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:31:41.537+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:31:41.537+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T16:33:01.193+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:33:01.193+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:33:01.197+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:33:01.198+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T16:35:13.418+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:35:13.418+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:35:13.423+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:35:13.424+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T16:36:12.946+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:36:12.947+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:36:12.951+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:36:12.952+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T16:37:23.228+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:37:23.229+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:37:23.234+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:37:23.234+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T16:38:40.552+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:38:40.552+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:38:40.556+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T16:38:40.557+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2024-12-07T19:12:40.791+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T19:12:40.792+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2024-12-07T19:12:40.798+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2024-12-07T19:12:40.799+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
