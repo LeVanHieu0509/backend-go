@@ -1,11 +1,30 @@
 package main
 
 import (
+	"net/http"
+
 	_ "github.com/LeVanHieu0509/backend-go/cmd/swag/docs"
 	"github.com/LeVanHieu0509/backend-go/internal/initialize"
+	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+var pingCounter = prometheus.NewCounter(
+	prometheus.CounterOpts{
+		Name: "ping_request_count_total",
+		Help: "Total number of ping requests.",
+	},
+)
+
+func ping(c *gin.Context) {
+	pingCounter.Inc()
+	c.JSON(http.StatusOK, gin.H{
+		"status": "OK",
+	})
+}
 
 // swagger embed files
 // @title           Swagger Example API
@@ -31,6 +50,11 @@ import (
 func main() {
 
 	r := initialize.Run()
+
+	prometheus.MustRegister(pingCounter)
+
+	r.GET("/ping/200", ping)
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(":8001")
 }

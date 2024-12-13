@@ -9,9 +9,9 @@ docker_build:
 	docker-compose up -d --build
 	docker-compose ps
 docker_stop:
-	docker-compose down
+	docker-compose -f environment/docker-compose-dev.yml down
 docker_up:
-	docker-compose up -d
+	docker-compose -f environment/docker-compose-dev.yml up -d
 binancef:
 	go run ./cmd/cli/binancef/main.binancef.go
 dev: 

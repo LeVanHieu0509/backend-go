@@ -61,6 +61,39 @@ services:
     ports:
       - "8002:8001"
 
+  kafka:
+    image: bitnami/kafka:3.5
+    container_name: kafka_container
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9094,CONTROLLER://:9095
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.115:19094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka_container:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
+      KAFKA_KRAFT_CLUSTER_ID: aF3+z07$wT1~yY1?cC7,qW
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+      KAFKA_BROKER_ID: 1
+    ports:
+      - "19094:9094"
+      - "19095:9095"
+    volumes:
+      - ./kafka/broker1:/bitnami/kafka:rw
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui_container
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_container:9094
+    ports:
+      - "9090:8080"
+    depends_on:
+      - kafka
+
 volumes:
   mysql_data:
   redis_data:
@@ -68,3 +101,36 @@ volumes:
 networks:
   app-network:
     driver: bridge
+
+  # kafka:
+  #   image: bitnami/kafka:3.5
+  #   container_name: kafka_container
+  #   environment:
+  #     KAFKA_ENABLE_KRAFT: yes
+  #     KAFKA_CFG_PROCESS_ROLES: controller,broker
+  #     KAFKA_CFG_LISTENERS: PLAINTEXT://:9094,CONTROLLER://:9095
+  #     KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.115:19094
+  #     KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+  #     KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka_container:9093
+  #     KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+  #     KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
+  #     KAFKA_KRAFT_CLUSTER_ID: aF3+z07$wT1~yY1?cC7,qW
+  #     ALLOW_PLAINTEXT_LISTENER: yes
+  #     KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+  #     KAFKA_BROKER_ID: 1
+  #   ports:
+  #     - "19094:9094"
+  #     - "19095:9095"
+  #   volumes:
+  #     - ./kafka/broker1:/bitnami/kafka:rw
+
+  # kafka-ui:
+  #   image: provectuslabs/kafka-ui:latest
+  #   container_name: kafka-ui_container
+  #   environment:
+  #     KAFKA_CLUSTERS_0_NAME: local
+  #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_container:9094
+  #   ports:
+  #     - "9090:8080"
+  #   depends_on:
+  #     - kafka

@@ -1,0 +1,73 @@
+version: "3.8"
+
+networks:
+  pre-go-local-networks:
+    driver: bridge
+
+services:
+  mysql:
+    container_name: mysql_con
+    image: mysql:8.0
+    restart: always
+
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 123abc
+      MYSQL_DATABASE: shopdevgo
+      #      MYSQL_USER: sandbox_user
+      #      MYSQL_PASSWORD: passpass
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "33060:3306"
+    volumes:
+      - "./data/mysql_data:/var/lib/mysql"
+      # - "./data/my.cnf:/etc/mysql/my.cnf"
+      # - "./data/sql:/docker-entrypoint-initdb.d"
+    networks:
+      - pre-go-local-networks
+  redis:
+    image: redis:7.0
+    container_name: redis_con
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis_data:/data
+    networks:
+      - pre-go-local-networks
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: pre-event-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "9093:9090"
+    networks:
+      - pre-go-local-networks
+
+  grafana:
+    image: grafana/grafana
+    container_name: pre-event-grafana
+    hostname: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_DOMAIN=localhost
+      - GF_LOG_MODE=console file
+      - GF_LOG_FILTERS=alerting.notifier.slack:debug alertmanager:debug ngalert:debug
+    volumes:
+      - ./grafana-storage:/var/lib/grafana
+    ports:
+      - "3002:3000"
+    networks:
+      - pre-go-local-networks

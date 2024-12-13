@@ -22,6 +22,10 @@
 18. go get -u github.com/golang-jwt/jwt
 19. rate-limiter: go get github.com/ulule/limiter/v3@v3.11.2
 
+20. go get github.com/prometheus/client_golang/prometheus
+21. go get github.com/prometheus/client_golang/prometheus/promauto
+22. go get github.com/prometheus/client_golang/prometheus/promhttp
+
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 
 run server: go run cmd/server/main.go

@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+  # scrape_timeout: 10s # Thời gian chờ trước khi hủy scrape
+
+scrape_configs:
+  - job_name: "shopdev-go-api"
+    scrape_interval: 5s
+    # scrape_timeout: 10s
+    static_configs:
+      - targets: ["host.docker.internal:8001"]
+
+  - job_name: "prometheus-instance-monitor"
+    scrape_interval: 5s
+    # scrape_timeout: 10s
+    static_configs:
+      - targets: ["host.docker.internal:9093"]

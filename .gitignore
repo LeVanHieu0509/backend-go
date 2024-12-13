@@ -10,3 +10,5 @@ videos/*
 !videos/*.ts
 public/_next-video
 docker
+environment/data
+environment/grafana-storage
