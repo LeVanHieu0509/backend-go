@@ -14,6 +14,7 @@ type Message struct {
 	Price   int
 }
 
+// buyTicket gửi các đơn hàng vào buyChannel.
 func buyTicket(channel chan<- Message, orders []Message) {
 	// Lặp qua danh sách các đơn hàng (orders) và gửi từng đơn hàng (Message) vào channel.
 	for _, order := range orders {
@@ -25,6 +26,7 @@ func buyTicket(channel chan<- Message, orders []Message) {
 	close(channel)
 }
 
+// cancelTicket gửi mã hủy vào cancelChannel
 func cancelTicket(channel chan<- string, cancelOrders []string) {
 	// Lặp qua danh sách mã đơn hàng cần hủy (cancelOrders) và in thông báo hủy.
 	for _, orderId := range cancelOrders {
@@ -58,8 +60,10 @@ func handlerOrder(orderChannel <-chan Message, cancelChanel <-chan string) {
 	}
 }
 
+// Khi có dữ liệu từ bất kỳ kênh nào, handlerOrderSelect xử lý ngay lập tức mà không làm gián đoạn các kênh khác
 func handlerOrderSelect(orderChannel <-chan Message, cancelChanel <-chan string) {
 	for {
+		// Khi một kênh không có dữ liệu, select sẽ chờ dữ liệu từ các kênh khác, tránh tình trạng "đứng hình" (deadlock) khi một kênh không có dữ liệu.
 		select {
 		// Đọc từ orderChannel để xử lý đơn hàng
 		case order, orderOK := <-orderChannel:
