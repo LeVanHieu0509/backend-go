@@ -636,3 +636,8 @@
 {"level":"INFO","time":"2024-12-13T17:37:55.968+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
 {"level":"INFO","time":"2024-12-13T17:37:55.976+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
 {"level":"INFO","time":"2024-12-13T17:37:55.977+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"INFO","time":"2025-01-01T16:40:48.192+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-01-01T16:40:48.192+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"ERROR","time":"2025-01-01T16:40:48.264+0700","caller":"initialize/redis.go:29","msg":"Redis initialization Error:","error":"dial tcp [::1]:6379: connect: connection refused","stacktrace":"github.com/LeVanHieu0509/backend-go/internal/initialize.InitRedis\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/redis.go:29\ngithub.com/LeVanHieu0509/backend-go/internal/initialize.Run\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/run.go:20\nmain.main\n\t/Users/hieulevan/go/src/go-backend-api/cmd/server/main.go:52\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:271"}
+{"level":"INFO","time":"2025-01-01T16:40:48.264+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
+{"level":"INFO","time":"2025-01-01T16:40:48.454+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":""}

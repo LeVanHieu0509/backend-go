@@ -109,6 +109,7 @@ func getProductById(id int, wg *sync.WaitGroup) {
 	if err != nil {
 		return // Thoát nếu có lỗi trong quá trình gửi yêu cầu HTTP
 	}
+
 	defer resp.Body.Close() // Đảm bảo đóng response body sau khi đọc xong
 
 	body, err := io.ReadAll(resp.Body)
@@ -127,7 +128,7 @@ func getProductById(id int, wg *sync.WaitGroup) {
 		- 1 người (bấm điện thoại, hút thuốc), 1 người (uống nước, bấm điện thoại)
 
 	3. wait group
-		-  là công cụ trong Go để đồng bộ hóa các goroutine.
+		- Là công cụ trong Go để đồng bộ hóa các goroutine.
 		- Nó đảm bảo rằng chương trình chính chờ cho đến khi tất cả các goroutine được quản lý bởi WaitGroup hoàn thành.
 
 
