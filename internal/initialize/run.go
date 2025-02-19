@@ -18,7 +18,7 @@ func Run() *gin.Engine {
 	InitMySqlC()
 	InitServiceInterface()
 	InitRedis()
-	InitKafka()
+	// InitKafka()
 	r := InitRouter()
 
 	return r

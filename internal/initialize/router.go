@@ -54,6 +54,7 @@ func InitRouter() *gin.Engine {
 	{
 		userRouter.InitUserRouter(MainGroup)
 		userRouter.InitProductRouter(MainGroup)
+		userRouter.InitTicketRouter(MainGroup)
 	}
 	{
 		managerRouter.InitUserRouter(MainGroup)

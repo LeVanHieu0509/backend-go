@@ -21,8 +21,8 @@ services:
       - "33060:3306"
     volumes:
       - "./data/mysql_data:/var/lib/mysql"
+      - "./mysql/init:/docker-entrypoint-initdb.d/"
       # - "./data/my.cnf:/etc/mysql/my.cnf"
-      # - "./data/sql:/docker-entrypoint-initdb.d"
     networks:
       - pre-go-local-networks
   redis:
