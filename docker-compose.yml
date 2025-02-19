@@ -1,136 +1,122 @@
-version: "3.8"
+version: "3.9"
 services:
-  # mysql:
-  #   image: mysql:8.0
-  #   container_name: mysql_con
-  #   restart: always
-  #   command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root1234
-  #     MYSQL_DATABASE: shopdevgo
-  #     MYSQL_USER: levanhieu
-  #     MYSQL_PASSWORD: levanhieu1234
-  #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #     - ./init:/docker-entrypoint-initdb.d
-  #   networks:
-  #     - app-network
-
   mysql:
-    container_name: mysql_con
+    container_name: mysql_go
     image: mysql:8.0
     restart: always
-
     command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: 123abc
-      MYSQL_DATABASE: taphoa-db
-      #      MYSQL_USER: sandbox_user
-      #      MYSQL_PASSWORD: passpass
+      MYSQL_DATABASE: golang-db
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "33060:3306"
+      - "33061:3306"
     volumes:
       - "./docker/db/data:/var/lib/mysql"
       - "./docker/db/my.cnf:/etc/mysql/my.cnf"
       - "./docker/db/sql:/docker-entrypoint-initdb.d"
-    networks:
-      - app-network
+    # networks:
+    #   - go-network
 
   redis:
     image: redis:7.0
-    container_name: redis_con
+    container_name: redis_go
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    networks:
-      - app-network
+    # networks:
+    #   - go-network
 
   app:
     build: .
     container_name: my_app
-    networks:
-      - app-network
+    # networks:
+    #   - go-network
     depends_on:
       - redis
       - mysql
     ports:
       - "8002:8001"
 
-  kafka:
+  kafka1:
     image: bitnami/kafka:3.5
-    container_name: kafka_container
-    environment:
-      KAFKA_ENABLE_KRAFT: yes
-      KAFKA_CFG_PROCESS_ROLES: controller,broker
-      KAFKA_CFG_LISTENERS: PLAINTEXT://:9094,CONTROLLER://:9095
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.115:19094
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka_container:9093
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
-      KAFKA_KRAFT_CLUSTER_ID: aF3+z07$wT1~yY1?cC7,qW
-      ALLOW_PLAINTEXT_LISTENER: yes
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
-      KAFKA_BROKER_ID: 1
+    container_name: kafka1
     ports:
-      - "19094:9094"
-      - "19095:9095"
+      - "9192:9092" # Broker Port
+      - "9193:9094" # Controller Port
+    environment:
+      ### General configurations
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      # Define Kafka server-side socket listening ports
+      # PLAINTEXT: Đây là cổng kết nối nội bộ trong container, chạy bằng dockerfile là phải kết nối bằng cổng này.
+      # CONTROLLER: brocker lắng nghe kết nối zupkeeper
+      # EXTERNAL: Các kết nối ở ngoài
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      # Define security protocol
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      # Set advertised listener
+      # khi client mở kết nối thông qua external thì Kafka sẽ trả lại mình địa chỉ phân giải trong metadata
+      - KAFKA_CFG_ADVERTISED_LISTENERS=EXTERNAL://192.168.0.109:9193,PLAINTEXT://kafka1:9092
+      # Interbroker listener name
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      # Cluster ID for Kafka, must be the same across the cluster. Use a generated UUID
+      - KAFKA_KRAFT_CLUSTER_ID=LeIM2dIFQkiUFvXCEcqRWA
+      # Cluster address
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093
+      # Allow PLAINTEXT listener (default is false; not recommended for production)
+      - ALLOW_PLAINTEXT_LISTENER=yes
+        # Set maximum and initial memory for the broker
+      - KAFKA_HEAP_OPTS=-Xmx512M -Xms256M
+      # Enable auto-creation of topics
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      # Message retention period (in milliseconds), set to 7 days
+      - KAFKA_LOG_RETENTION_MS=604800000
+
+      ### Broker configurations
+      # Define external access address (host IP and port) -> get IP: run docker inspect kafka1
+      # - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://${KAFKA1_IP}:9092
+
+      # Broker ID, must be unique
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_NODE_ID=1
     volumes:
-      - ./kafka/broker1:/bitnami/kafka:rw
+      - ./data/bitnami/kafka1:/bitnami/kafka
+    # networks:
+    #   - go-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "kafka-topics.sh",
+          "--list",
+          "--bootstrap-server",
+          "kafka1:9092",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui_container
+    container_name: kafka-ui
     environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_container:9094
+      KAFKA_CLUSTERS_0_NAME: env-dev
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092
+      DYNAMIC_CONFIG_ENABLE: "true"
     ports:
-      - "9090:8080"
+      - "8080:8080"
     depends_on:
-      - kafka
+      kafka1:
+        condition: service_healthy
+    # networks:
+    #   - go-network
 
 volumes:
   mysql_data:
   redis_data:
-
-networks:
-  app-network:
-    driver: bridge
-
-  # kafka:
-  #   image: bitnami/kafka:3.5
-  #   container_name: kafka_container
-  #   environment:
-  #     KAFKA_ENABLE_KRAFT: yes
-  #     KAFKA_CFG_PROCESS_ROLES: controller,broker
-  #     KAFKA_CFG_LISTENERS: PLAINTEXT://:9094,CONTROLLER://:9095
-  #     KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.115:19094
-  #     KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-  #     KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka_container:9093
-  #     KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-  #     KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
-  #     KAFKA_KRAFT_CLUSTER_ID: aF3+z07$wT1~yY1?cC7,qW
-  #     ALLOW_PLAINTEXT_LISTENER: yes
-  #     KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
-  #     KAFKA_BROKER_ID: 1
-  #   ports:
-  #     - "19094:9094"
-  #     - "19095:9095"
-  #   volumes:
-  #     - ./kafka/broker1:/bitnami/kafka:rw
-
-  # kafka-ui:
-  #   image: provectuslabs/kafka-ui:latest
-  #   container_name: kafka-ui_container
-  #   environment:
-  #     KAFKA_CLUSTERS_0_NAME: local
-  #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_container:9094
-  #   ports:
-  #     - "9090:8080"
-  #   depends_on:
-  #     - kafka
+# networks:
+#   go-network:
+#     driver: bridge

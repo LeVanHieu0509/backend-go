@@ -12,3 +12,4 @@ public/_next-video
 docker
 environment/data
 environment/grafana-storage
+data/bitnami

@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net"
 	"strings"
 	"time"
 
@@ -12,47 +14,55 @@ import (
 )
 
 var (
-	// Là một con trỏ tới một Kafka writer để gửi tin nhắn.
 	kafkaProducer *kafka.Writer
-	// kafkaConsumer *kafka.Reader
 )
 
 const (
-	kafkaURL   = "localhost:9092" //Kafka broker URL
-	kafkaTopic = "user_topic_vip" //Kafka topic name
+	kafkaURL   = "192.168.0.109:9193" // Kafka broker URL
+	kafkaTopic = "user_topic_vip1"    // Kafka topic name
 )
 
 /*
-For Consumer,
-Hàm này tạo và trả về một Kafka reader để tiêu thụ tin nhắn từ Kafka.
-Nó cấu hình Kafka reader với các tham số như brokers, GroupID, topic, MinBytes, MaxBytes và CommitInterval.
+Tạo Kafka reader (Consumer)
 */
 func getKafkaReader(kafkaURL, topic, groupID string) *kafka.Reader {
 	brokers := strings.Split(kafkaURL, ",")
+	log.Printf("Connecting to Kafka brokers: %v, topic: %s, groupID: %s", brokers, topic, groupID)
+
 	return kafka.NewReader(kafka.ReaderConfig{
-		Brokers:        brokers, // danh sách brockers => nếu chứa nhiều địa chỉ: []string{"localhost:2001", "localhost:200"}
+		Brokers:        brokers,
 		GroupID:        groupID,
 		Topic:          topic,
-		MinBytes:       10e3,        // 10KB - Vận chuyển dữ liệu
-		MaxBytes:       10e6,        // 10MB
-		CommitInterval: time.Second, // là khoảng thời gian giữa các lần commit offset là 1 s
-
-		// Nếu user không muốn nhận tin nhắn đầu mà chỉ lấy tin nhắn cuối thôi thì sài LastOffset
-		StartOffset: kafka.FirstOffset, // Các user vào lấy tin nhắn - đạt giá trị offset ban đầu khi mà user lắng nghe
+		MinBytes:       10e3,             // 10KB
+		MaxBytes:       10e6,             // 10MB
+		SessionTimeout: 60 * time.Second, // Tăng thời gian session timeout
+		StartOffset:    kafka.LastOffset,
 	})
+
 }
 
 /*
-For Producer,
-Hàm này tạo và trả về một Kafka writer để gửi tin nhắn tới Kafka.
-Writer được cấu hình với địa chỉ Kafka broker, tên topic và một balancer (LeastBytes) để cân bằng tải.
+Tạo Kafka writer (Producer)
 */
 func getKafkaWriter(kafkaURL, topic string) *kafka.Writer {
-	return &kafka.Writer{
-		Addr:     kafka.TCP(kafkaURL),
-		Topic:    topic,
-		Balancer: &kafka.LeastBytes{}, // Cân bằng tải
+	writer := &kafka.Writer{
+		Addr:         kafka.TCP(kafkaURL),
+		Topic:        topic,
+		Balancer:     &kafka.LeastBytes{},
+		RequiredAcks: kafka.RequireOne, //
 	}
+
+	// Test connection
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// defer cancel()
+
+	// err := writer.WriteMessages(ctx, kafka.Message{Value: []byte("Test connection")})
+	// if err != nil {
+	// 	log.Fatalf("Failed to connect Kafka producer: %v\n", err)
+	// }
+
+	// log.Println("Kafka producer connected successfully.")
+	return writer
 }
 
 type StockInfo struct {
@@ -61,18 +71,14 @@ type StockInfo struct {
 }
 
 func newStock(msg, typeMsg string) *StockInfo {
-	s := StockInfo{}
-
-	s.Message = msg
-	s.Type = typeMsg
-
-	//return pointer s
-	return &s
+	return &StockInfo{
+		Message: msg,
+		Type:    typeMsg,
+	}
 }
 
 /*
-Gửi tin nhắn này tới Kafka bằng Kafka producer.
-Nếu gửi thành công, trả về JSON với thông báo thành công, nếu thất bại, trả về lỗi.
+API gửi tin nhắn tới Kafka
 */
 func actionStock(c *gin.Context) {
 	s := newStock(c.Query("msg"), c.Query("type"))
@@ -90,21 +96,21 @@ func actionStock(c *gin.Context) {
 		Value: []byte(jsonBody),
 	}
 
-	// sử dụng producer để mà viết 1 message
+	// Gửi tin nhắn tới Kafka
 	err := kafkaProducer.WriteMessages(context.Background(), msg)
-
 	if err != nil {
-		c.JSON(200, gin.H{
+		log.Printf("Error writing to Kafka: %v\n", err)
+		c.JSON(500, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
 
+	log.Printf("Message sent successfully: %s\n", string(jsonBody))
 	c.JSON(200, gin.H{
 		"err": "",
-		"msg": "action successfully",
+		"msg": "Action successfully",
 	})
-
 }
 
 // Consumer hóng mua ATC => Khớp lệnh => ATC: Khi mà phiên giao dịch hết
@@ -119,44 +125,68 @@ Tin nhắn nhận được sẽ được in ra console.
 func RegisterConsumerATC(id int) {
 	// group consumer???
 	kafkaGroupId := fmt.Sprintf("consumer-group-%d", id)
-
 	// Consumer đăng kí đọc ở topic nào và ở group ID nào
 	reader := getKafkaReader(kafkaURL, kafkaTopic, kafkaGroupId)
-
-	// Giải phóng kết nối sau khi hàm chạy
 	defer reader.Close()
 
-	fmt.Printf("Consumer(%d) Hong Phien ATC::\n", id)
+	log.Printf("Consumer(%d) started listening for topic: %s\n", id, kafkaTopic)
 
 	for {
 		m, err := reader.ReadMessage(context.Background())
-
 		if err != nil {
-			fmt.Printf("Consumer(%d) error: %v", id, err)
+			log.Printf("Consumer(%d) error: %v. Retrying...\n", id, err)
+			time.Sleep(2 * time.Second) // Retry sau 2 giây
+			continue
 		}
 
-		fmt.Printf("Consumer(%d), hong topic: %v, partition: %v, offset:%v, time:%d %s = %s\n", id, m.Topic, m.Partition, m.Offset, m.Time.Unix(), string(m.Key), string(m.Value))
+		log.Printf("Consumer(%d), topic: %s, partition: %d, offset: %d, key: %s, value: %s\n",
+			id, m.Topic, m.Partition, m.Offset, string(m.Key), string(m.Value))
 	}
 }
 
-// đọc 1m request mỗi giây
+/*
+Chạy ứng dụng
+*/
 func main() {
 	r := gin.Default()
-
-	// Khai báo producer và lắng nghe nó dựa trên pointer
+	getIpHost()
+	// Tạo Kafka producer
 	kafkaProducer = getKafkaWriter(kafkaURL, kafkaTopic)
 	defer kafkaProducer.Close()
 
+	// Endpoint API
 	r.POST("action/stock", actionStock)
 
-	// Đăng kí 2 user để mua stock trong phiên ATC bao gồm ID 1, 2
+	// Khởi chạy consumer
 	go RegisterConsumerATC(1)
 	go RegisterConsumerATC(2)
-	go RegisterConsumerATC(3)
-	go RegisterConsumerATC(4) // Không lấy những tin nhắn cũ
 
-	r.Run(":8999")
-
+	// Chạy HTTP server
+	log.Println("Server running on http://localhost:8999")
+	if err := r.Run(":8999"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
 
-// curl -X POST "http://localhos/localhost:8999/action/stock?msg=HPG&type=MUA"
+func getIpHost() {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	for _, addr := range addrs {
+		ipNet, ok := addr.(*net.IPNet)
+		if ok && !ipNet.IP.IsLoopback() {
+			if ipNet.IP.To4() != nil {
+				fmt.Println("Local IP Address:", ipNet.IP.String())
+			}
+		}
+	}
+}
+
+// docker exec -it kafka1 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic user_topic_vip1 --from-beginning
+// tăng partition: docker exec -it kafka1 kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic user_topic_vip1 --partitions 3
+// kiểm tra partiion: docker exec -it kafka1 kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic user_topic_vip1
+// thêm tin nhắn: docker exec -it kafka1 kafka-console-producer.sh --bootstrap-server localhost:9092 --topic user_topic_vip1
+// kiểm tra phiên bản kafka: docker exec -it kafka1 kafka-topics.sh --version

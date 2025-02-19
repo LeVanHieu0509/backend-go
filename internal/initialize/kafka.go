@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"context"
 	"log"
 
 	"github.com/LeVanHieu0509/backend-go/global"
@@ -14,16 +15,25 @@ var (
 )
 
 const (
-	kafkaURL   = "localhost:9092" //Kafka broker URL
-	kafkaTopic = "otp-auth-topic" //Kafka topic name
+	kafkaURL   = "192.168.0.109:9193" //Kafka broker URL
+	kafkaTopic = "otp-auth-topic"     //Kafka topic name
 )
 
 func InitKafka() {
-	global.KafkaProducer = &kafka.Writer{
+	writer := &kafka.Writer{
 		Addr:     kafka.TCP(kafkaURL),
 		Topic:    kafkaTopic,
-		Balancer: &kafka.LeastBytes{}, // Cân bằng tải
+		Balancer: &kafka.LeastBytes{},
 	}
+
+	// Test connection
+	err := writer.WriteMessages(context.Background(), kafka.Message{Value: []byte("Test connection")})
+	if err != nil {
+		log.Fatalf("Failed to connect Kafka producer: %v", err)
+	}
+
+	log.Println("Kafka producer connected successfully.")
+	global.KafkaProducer = writer
 }
 
 func CloseKafka() {
