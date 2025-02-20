@@ -25,6 +25,7 @@
 20. go get github.com/prometheus/client_golang/prometheus
 21. go get github.com/prometheus/client_golang/prometheus/promauto
 22. go get github.com/prometheus/client_golang/prometheus/promhttp
+23. air = nodemon :go install github.com/air-verse/air@latest
 
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 
