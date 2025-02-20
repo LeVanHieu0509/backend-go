@@ -19,8 +19,8 @@ func NewGRPCHandler(grpcHandler *grpc.Server, service OrdersService) {
 	}
 
 	pb.RegisterOrderServiceServer(grpcHandler, handler)
-
 }
+
 func (h *GrpcHandler) CreateOrder(ctx context.Context, p *pb.CreateOrderRequest) (*pb.Order, error) {
 	log.Println("New order received! Order %v", p)
 

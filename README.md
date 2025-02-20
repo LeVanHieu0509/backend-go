@@ -91,6 +91,8 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 Lệnh này sẽ tạo ra hai tệp Go: một cho định nghĩa giao thức và một cho dịch vụ gRPC.
 
+gRPC: Là giao thức truyền thông đồng bộ, nghĩa là client và server giao tiếp trực tiếp, và client có thể nhận được phản hồi ngay lập tức sau khi yêu cầu được gửi đi. Điều này phù hợp với các microservices cần phải đồng bộ hóa nhanh và trả về kết quả ngay lập tức.
+
 1. --go_out=.: Chỉ định đầu ra cho mã Go từ Protocol Buffers.
 2. --go-grpc_out=.: Chỉ định đầu ra cho mã gRPC từ Protocol Buffers.
 3. protoc --go_out=. --go-grpc_out=. event.proto
