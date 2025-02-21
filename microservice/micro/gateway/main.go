@@ -14,7 +14,8 @@ import (
 var (
 	serviceName      = "gateway"
 	httpAddr         = common.EnvString("HTTP_ADDR", ":8080") // Địa chỉ HTTP mà server sẽ lắng nghe
-	orderServiceAddr = "localhost:2000"                       // Địa chỉ của dịch vụ gRPC mà bạn sẽ kết nối tới
+	orderServiceAddr = "localhost:2000"
+	// Địa chỉ của dịch vụ gRPC mà bạn sẽ kết nối tới
 )
 
 func main() {
