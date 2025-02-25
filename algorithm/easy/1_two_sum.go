@@ -50,4 +50,29 @@ func main() {
 	)
 
 	log.Println(twoSum(num, 6))
+	log.Println(towSumPracticeDay2(num, 6))
+
+}
+
+func towSumPracticeDay2(nums []int, target int) []int {
+	//1. Create object empty to save value element to key of object
+	var object = map[int]int{}
+
+	//2. Loop the nums
+	for i := 0; i < len(nums); i++ {
+		//3. Create variable diff to save value of target - nums[i]
+		var diff = target - nums[i]
+
+		//4. Check if the diff is exists key in object
+		if value, exists := object[diff]; exists {
+
+			//5. If exists return value of key and i of nums
+			return []int{value, i}
+		} else {
+			//6. else save the element of nums to object with element of nums as key and i as value
+			object[nums[i]] = i
+		}
+	}
+	//7. error return -1,-1
+	return []int{-1, -1}
 }
