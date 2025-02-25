@@ -3,9 +3,15 @@ package main
 import "strconv"
 
 func main() {
-	println(isPalindrome(242))
-	println(isPalindromeWay2(242))
+	print(isPalindrome, 242)
+	print(isPalindromeWay2, 242)
+	print(isPalindromeOptimize, 242)
+}
 
+type Func func(int) bool
+
+func print(fun Func, x int) {
+	println(fun(x))
 }
 
 /*
@@ -29,36 +35,41 @@ Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
 */
 
 // Check xuôi ngược đều giống nhau
-// 7ms
 func isPalindrome(x int) bool {
-	//1. Find rule palindrome and logic handle it
-	//2. If x < 0 return false
-	if x < 0 || x%10 == 0 {
+	// Nếu x là số âm hoặc kết thúc bằng 0 (nhưng không phải là 0), thì không thể là số palindrome
+	if x < 0 || (x%10 == 0 && x != 0) {
 		return false
 	}
-	//3. If x == 0 return true
+	// Nếu x == 0 trả về true
 	if x == 0 {
 		return true
 	}
-	//5. Create variable reverse to save value of x
-	reserve := x
-	//7. Create variable result to save value of 0
-	result := 0
-	//8. Loop the reverse
+	// Tạo biến reserve để lưu giá trị của x
+	var reserve = x
+	// Tạo biến temp để lưu giá trị của x
+	var temp = x
+	// Tạo biến result để lưu giá trị của 0
+	var result = 0
+	// Vòng lặp để đảo ngược số
 	for reserve != 0 {
-		//9. Create variable remainder to save value of reverse % 10
+		// Tạo biến remainder để lưu giá trị của reserve % 10
 		var remainder = reserve % 10
-		//10. Create variable result to save value of result * 10 + remainder
+		println("remainder", remainder)
+		// Tạo biến result để lưu giá trị của result * 10 + remainder
 		result = result*10 + remainder
-		//11. Create variable reverse to save value of reverse / 10
-		x /= 10
+		println("result", result)
+		// Tạo biến reserve để lưu giá trị của reserve / 10
+		reserve = reserve / 10
+		println("reserve", reserve)
 	}
-
-	//13. Return false
-	return x == result
+	// Kiểm tra nếu temp == result trả về true
+	if temp == result {
+		return true
+	}
+	// Trả về false
+	return false
 }
 
-// 2ms
 func isPalindromeWay2(x int) bool {
 	xStr := strconv.Itoa(x)
 
@@ -69,4 +80,20 @@ func isPalindromeWay2(x int) bool {
 		}
 	}
 	return true
+}
+
+func isPalindromeOptimize(x int) bool {
+	// Nếu x là số âm hoặc kết thúc bằng 0 (nhưng không phải là 0), thì không thể là số palindrome
+	if x < 0 || (x%10 == 0 && x != 0) {
+		return false
+	}
+	reversed := 0
+	original := x
+	// Đảo ngược số
+	for x > 0 {
+		reversed = reversed*10 + x%10 // Toán tử chia lấy phần dư. Chia toán hạng đầu tiên cho toán hạng thứ hai và tạo ra phần dư. => lấy phần dư
+		x /= 10                       // Toán tử chia. Chia toán hạng đầu tiên cho toán hạng thứ hai và tạo ra thương. => lấy thương
+	}
+	// Kiểm tra xem số gốc có bằng với số đã đảo ngược hay không
+	return original == reversed
 }
