@@ -1,6 +1,9 @@
 package main
 
-import "log"
+import (
+	"log"
+	"strings"
+)
 
 /*
  1. Given an array of integers nums and an integer target,
@@ -52,6 +55,15 @@ func main() {
 	log.Println(twoSum(num, 6))
 	log.Println(towSumPracticeDay2(num, 6))
 
+	log.Println(twoSumInter([]StructTwoSum{
+		{Key: "A", Value: "25"},
+		{Key: "B", Value: "26"},
+		{Key: "C", Value: "27"},
+		{Key: "D", Value: "28"},
+		{Key: "E", Value: "25"},
+		{Key: "G", Value: "26"},
+	}))
+
 }
 
 func towSumPracticeDay2(nums []int, target int) []int {
@@ -75,4 +87,40 @@ func towSumPracticeDay2(nums []int, target int) []int {
 	}
 	//7. error return -1,-1
 	return []int{-1, -1}
+}
+
+type StructTwoSum struct {
+	Key   string
+	Value string
+}
+
+func twoSumInter(arr []StructTwoSum) []StructTwoSum {
+	// Khởi tạo map để lưu trữ các key tương ứng với value
+	var newObj = map[string][]string{}
+	var newArr = []StructTwoSum{}
+
+	// Duyệt qua các phần tử trong arr chỉ với 1 vòng lặp
+	for _, item := range arr {
+		// Kiểm tra xem value đã có trong map chưa
+		if _, exists := newObj[item.Value]; exists {
+			// Nếu đã tồn tại, thêm key vào value tương ứng
+			newObj[item.Value] = append(newObj[item.Value], item.Key)
+		} else {
+			// Nếu chưa có, khởi tạo giá trị mới cho key và value
+			newObj[item.Value] = []string{item.Key}
+		}
+	}
+
+	// Duyệt qua map để chuyển các nhóm thành kết quả cuối cùng
+	// (Tạo newArr từ newObj)
+	// map trong Go có độ phức tạp trung bình là O(1) cho các thao tác truy xuất và chèn
+	for value, keys := range newObj {
+		newArr = append(newArr, StructTwoSum{
+			Key:   value,
+			Value: strings.Join(keys, ","), // Nối các key lại với nhau
+		})
+	}
+
+	// Trả về mảng các StructTwoSum đã nhóm
+	return newArr
 }
