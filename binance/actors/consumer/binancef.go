@@ -37,7 +37,7 @@ Việc sử dụng thư viện actor giúp mã dễ dàng mở rộng và quản
 const wsEndpoint = "wss://fstream.binance.com/stream?streams="
 
 // Mảng các cặp giao dịch mà bạn muốn theo dõi. Trong trường hợp này là btcusdt và ethusdt.
-var symbols = []string{"zkusdt"}
+var symbols = []string{"wusdt"}
 
 /*
 xây dựng một URL kết nối tới WebSocket của Binance để nhận các loại dữ liệu khác nhau
@@ -120,7 +120,7 @@ func (a *Binancef) wsLoop() {
 		stream := v.GetStringBytes("stream")
 		symbol, kind := splitStream(string(stream))
 		data := v.Get("data")
-		fmt.Println("data", data)
+		// fmt.Println("data", data)
 		// Kiểm tra nếu loại thông điệp nhận được là aggTrade.
 		if kind == "aggTrade" {
 			// convert data difficult => data ez
