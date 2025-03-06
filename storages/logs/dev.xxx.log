@@ -683,3 +683,24 @@
 {"level":"INFO","time":"2025-02-19T14:29:29.472+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
 {"level":"INFO","time":"2025-02-19T14:29:29.475+0700","caller":"initialize/redis.go:31","msg":"Initializing Redis Successfully!"}
 {"level":"INFO","time":"2025-02-19T14:29:29.476+0700","caller":"initialize/redis.go:47","msg":"value score is: ","score":"100"}
+{"level":"ERROR","time":"2025-03-05T17:29:21.029+0700","caller":"initialize/mysql.go:16","msg":"Init mysql initialization error","error":"dial tcp 127.0.0.1:33060: connect: connection refused","stacktrace":"github.com/LeVanHieu0509/backend-go/internal/initialize.checkErrorPanic\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/mysql.go:16\ngithub.com/LeVanHieu0509/backend-go/internal/initialize.InitMySql\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/mysql.go:38\ngithub.com/LeVanHieu0509/backend-go/internal/initialize.Run\n\t/Users/hieulevan/go/src/go-backend-api/internal/initialize/run.go:17\nmain.main\n\t/Users/hieulevan/go/src/go-backend-api/cmd/server/main.go:52\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:271"}
+{"level":"INFO","time":"2025-03-06T15:27:24.908+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:27:24.908+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:28:10.772+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:28:10.772+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:29:36.677+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:29:36.678+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:55:27.029+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:55:27.030+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:55:44.419+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T15:55:44.420+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:35:53.076+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:35:53.077+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:54:44.330+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:54:44.330+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:55:05.273+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:55:05.274+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:55:31.230+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:55:31.231+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:55:48.730+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-06T16:55:48.731+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
