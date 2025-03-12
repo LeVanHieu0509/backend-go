@@ -50,12 +50,12 @@ func redisExample() {
 }
 
 func InitRedisSentinel() {
-	r := global.Config.Redis
+	// r := global.Config.Redis
 	rdb := redis.NewFailoverClient(&redis.FailoverOptions{
-		MasterName:    "mymaster",                                                        // The master name managed by Sentinel
-		SentinelAddrs: []string{"127.0.0.1:26379", "127.0.0.1:26380", "127.0.0.1:26381"}, // List of Sentinel addresses
-		DB:            r.Database,                                                        // Default database
-		Password:      r.Password,                                                        // Password, if Redis has one
+		MasterName:    "mymaster",
+		SentinelAddrs: []string{"127.0.0.1:26379", "127.0.0.1:26380", "127.0.0.1:26381"},
+		DB:            0,        // use default DB
+		Password:      "123456", // Password, if Redis has one
 	})
 
 	// Check the connection
@@ -84,9 +84,9 @@ func InitRedisSentinelViblo() {
 	fmt.Println("-----start connec redis-------")
 	rdb := redis.NewFailoverClusterClient(&redis.FailoverOptions{
 		MasterName:    "mymaster",
-		SentinelAddrs: []string{"127.0.0.1:26376", "127.0.0.1:26375", "127.0.0.1:26379"},
+		SentinelAddrs: []string{"127.0.0.1:26379", "127.0.0.1:26380", "127.0.0.1:26381"},
 		DB:            0, // use default DB
-		Password:      "CkkUdLPMT",
+		Password:      "123456",
 	})
 
 	// Check the connection
