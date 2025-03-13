@@ -1,15 +1,19 @@
-version: "3.7"
+version: "3.8"
 
 networks:
   redis-network:
     driver: bridge
-    name: redis-network
 
 services:
   redis-master:
     image: "redis:7.2.4"
     container_name: redis-master
-    command: ["sh", "-c", "redis-server --protected-mode no"]
+    command:
+      [
+        "sh",
+        "-c",
+        "redis-server --protected-mode no --slave-announce-ip 192.168.1.202 --slave-announce-port 6379 --requirepass 123456",
+      ]
     ports:
       - 6379:6379
     networks:
@@ -20,7 +24,12 @@ services:
     container_name: redis-slave1
     depends_on:
       - redis-master
-    command: ["sh", "-c", "redis-server --slaveof redis-master 6379"]
+    command:
+      [
+        "sh",
+        "-c",
+        "redis-server --slaveof redis-master 6379 --masterauth 123456 --requirepass 123456 --protected-mode no --slave-announce-ip 192.168.1.202 --slave-announce-port 6380",
+      ]
     ports:
       - 6380:6379
     networks:
@@ -31,7 +40,12 @@ services:
     container_name: redis-slave2
     depends_on:
       - redis-master
-    command: ["sh", "-c", "redis-server --slaveof redis-master 6379"]
+    command:
+      [
+        "sh",
+        "-c",
+        "redis-server --slaveof redis-master 6379 --masterauth 123456 --requirepass 123456 --protected-mode no --slave-announce-ip 192.168.1.202 --slave-announce-port 6381",
+      ]
     ports:
       - 6381:6379
     networks:

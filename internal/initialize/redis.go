@@ -79,35 +79,3 @@ func InitRedisSentinel() {
 
 	fmt.Println("Got value from Redis:", val)
 }
-
-func InitRedisSentinelViblo() {
-	fmt.Println("-----start connec redis-------")
-	rdb := redis.NewFailoverClusterClient(&redis.FailoverOptions{
-		MasterName:    "mymaster",
-		SentinelAddrs: []string{"127.0.0.1:26379", "127.0.0.1:26380", "127.0.0.1:26381"},
-		DB:            0, // use default DB
-		Password:      "123456",
-	})
-
-	// Check the connection
-	err := rdb.Set(ctx, "key", "value", 0).Err()
-	if err != nil {
-		panic(err)
-	}
-
-	val, err := rdb.Get(ctx, "key").Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("key", val)
-
-	val2, err := rdb.Get(ctx, "key2").Result()
-	if err == redis.Nil {
-		fmt.Println("key2 does not exist")
-	} else if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("key2", val2)
-	}
-	fmt.Println("Got value from Redis:", val)
-}

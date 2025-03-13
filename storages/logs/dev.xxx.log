@@ -723,3 +723,15 @@
 {"level":"INFO","time":"2025-03-11T16:43:52.890+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
 {"level":"INFO","time":"2025-03-11T16:50:18.998+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
 {"level":"INFO","time":"2025-03-11T16:50:18.998+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T22:30:13.022+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T22:30:13.023+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:16:21.998+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:16:21.999+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:23:58.133+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:23:58.133+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:27:07.246+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:27:07.246+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:46:56.711+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:46:56.712+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:50:43.953+0700","caller":"initialize/mysql.go:40","msg":"Initializing Mysql Successfully!"}
+{"level":"INFO","time":"2025-03-13T23:50:43.954+0700","caller":"initialize/mysqlc.go:37","msg":"Initializing Mysql Successfully!"}
