@@ -12,9 +12,9 @@ server:
 #   connMaxLifetime: 3600
 mysql:
   host: 127.0.0.1
-  port: 33060
+  port: 3306
   username: root
-  password: 123abc
+  password: root1234
   dbname: shopdevgo
   maxIdleConns: 10
   maxOpenConns: 100
