@@ -41,22 +41,24 @@ services:
       - kafka
 
   mysql:
+    container_name: mysql_con
     image: mysql:8.0
-    container_name: mysql_container
+    restart: always
+
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_ROOT_PASSWORD: root1234
-      MYSQL_DATABASE: shopdevgo
-      MYSQL_PASSWORD: root1234
+      MYSQL_ROOT_PASSWORD: 123abc
+      MYSQL_DATABASE: shopdev
+      #      MYSQL_USER: sandbox_user
+      #      MYSQL_PASSWORD: passpass
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "33306:3306"
+      - "33060:3306"
     volumes:
-      - ./data/mysql_data:/var/lib/mysql
-      - ./mysql/init:/docker-entrypoint-initdb.d/
-    command: [
-        "--character-set-server=utf8mb4",
-        "--collation-server=utf8mb4_unicode_ci",
-        "--skip-character-set-client-handshake", # Buộc tất cả kết nối sử dụng utf8mb4
-      ]
+      - "./docker/db/data:/var/lib/mysql"
+      - "./docker/db/my.cnf:/etc/mysql/my.cnf"
+      - "./docker/db/sql:/docker-entrypoint-initdb.d"
+
     networks:
       - pre-go-local-networks
 

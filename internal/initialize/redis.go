@@ -6,56 +6,39 @@ import (
 	"log"
 
 	"github.com/LeVanHieu0509/backend-go/global"
-	"github.com/LeVanHieu0509/backend-go/pkg/ultis"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
 
-// context để kiểm soát go routing
 var ctx = context.Background()
 
 func InitRedis() {
 	r := global.Config.Redis
-
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%v", r.Host, r.Port),
-		Password: r.Password,
-		DB:       r.Database, // use default DB
-		PoolSize: r.PoolSize, // Số lượng kết nối tối ra( có 10 connect cho 10 cpu sử dụng)
+		Addr:     fmt.Sprintf("%s:%v", r.Host, r.Port), // 55000
+		Password: r.Password,                           // no password set
+		DB:       r.Database,                           // use default DB
+		PoolSize: 10,                                   //
 	})
 
 	_, err := rdb.Ping(ctx).Result()
-
 	if err != nil {
 		global.Logger.Error("Redis initialization Error:", zap.Error(err))
 	}
-	global.Logger.Info("Initializing Redis Successfully!")
-	fmt.Println("Init Redis is running")
+
+	// fmt.Println("Initializing Redis Successfully")
+	global.Logger.Info("Initializing Redis Successfully")
 	global.Rdb = rdb
-
-	redisExample()
+	// redisExample()
 }
 
-func redisExample() {
-	err := global.Rdb.Set(ctx, "score", 100, 0).Err()
-
-	ultis.HandleErr(err, "Error redis setting: ")
-
-	value, err := global.Rdb.Get(ctx, "score").Result()
-
-	ultis.HandleErr(err, "Error redis setting")
-
-	global.Logger.Info("value score is: ", zap.String("score", value))
-
-}
-
+// advanced
 func InitRedisSentinel() {
-	// r := global.Config.Redis
 	rdb := redis.NewFailoverClient(&redis.FailoverOptions{
-		MasterName:    "mymaster",
+		MasterName:    "mymaster", // Tên master do Sentinel quản lý
 		SentinelAddrs: []string{"127.0.0.1:26379", "127.0.0.1:26380", "127.0.0.1:26381"},
-		DB:            0,        // use default DB
-		Password:      "123456", // Password, if Redis has one
+		DB:            0,        // Sử dụng database mặc định
+		Password:      "123456", // Nếu Redis có mật khẩu, điền vào đây
 	})
 
 	// Check the connection
@@ -77,5 +60,25 @@ func InitRedisSentinel() {
 		log.Fatalf("Error getting key: %v", err)
 	}
 
-	fmt.Println("Got value from Redis:", val)
+	fmt.Println("Value of test_key:", val)
+
+	global.Logger.Info("Initializing RedisSentinel Successfully")
+	global.Rdb = rdb
+	// redisExample()
+}
+
+func redisExample() {
+	err := global.Rdb.Set(ctx, "score", 100, 0).Err()
+	if err != nil {
+		fmt.Println("Error redis setting:", zap.Error(err))
+		return
+	}
+
+	value, err := global.Rdb.Get(ctx, "score").Result()
+	if err != nil {
+		fmt.Println("Error redis setting:", zap.Error(err))
+		return
+	}
+
+	global.Logger.Info("value score is::", zap.String("score", value))
 }

@@ -6,30 +6,29 @@ networks:
 
 services:
   mysql:
-    container_name: mysql_con
     image: mysql:8.0
+    container_name: mysql_con
     restart: always
-
     command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    environment:
-      MYSQL_ROOT_PASSWORD: 123abc
-      MYSQL_DATABASE: shopdevgo
-      #      MYSQL_USER: sandbox_user
-      #      MYSQL_PASSWORD: passpass
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "33060:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: shopdevgo
+      MYSQL_USER: levanhieu
+      MYSQL_PASSWORD: levanhieu1234
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - "./data/mysql_data:/var/lib/mysql"
       - "./mysql/init:/docker-entrypoint-initdb.d/"
-      # - "./data/my.cnf:/etc/mysql/my.cnf"
     networks:
       - pre-go-local-networks
+
   redis:
     image: redis:7.0
     container_name: redis_con
     ports:
-      - "6379:6379"
+      - "16379:6379"
     volumes:
       - ./data/redis_data:/data
     networks:

@@ -19,7 +19,7 @@ func Run() *gin.Engine {
 	InitServiceInterface()
 	// InitRedis()
 	InitRedisSentinel()
-	// InitKafka()
+	InitKafka()
 	r := InitRouter()
 
 	return r
