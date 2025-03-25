@@ -40,7 +40,7 @@ security:
     key: abc123
 redis:
   host: localhost
-  port: 6379
+  port: 6331
   password: ""
   db: 0
   pool_size: 10

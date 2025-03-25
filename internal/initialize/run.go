@@ -12,14 +12,15 @@ func Run() *gin.Engine {
 	LoadConfig()
 	m := global.Config.Mysql
 	fmt.Println("Loading configuration mysql", m.Username, m.Password)
-
+	InitPrometheus()
 	InitLogger()
 	InitMySql()
 	InitMySqlC()
-	InitServiceInterface()
-	// InitRedis()
-	InitRedisSentinel()
+	// InitRedisSentinel()
+	InitRedis()
 	InitKafka()
+	InitServiceInterface()
+
 	r := InitRouter()
 
 	return r

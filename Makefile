@@ -1,4 +1,4 @@
-GOOSE_DBSTRING ?= "levanhieu:levanhieu1234@tcp(127.0.0.1:33060)/shopdevgo"
+GOOSE_DBSTRING ?= "root:123abc@tcp(127.0.0.1:33060)/shopdev"
 GOOSE_MIGRATION_DIR ?= sql/schema
 GOOSE_DRIVER ?= mysql
 

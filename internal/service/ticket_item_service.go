@@ -7,9 +7,10 @@ import (
 )
 
 type (
-	ITicketHome interface{}
+	ITicketHome interface {
+	}
 	ITicketItem interface {
-		GetTicketItemById(ctx context.Context, ticketId int) (out *model.TicketItemsOutput, err error)
+		GetTicketItemById(ctx context.Context, ticketId int) (out model.TicketItemsOutput, err error)
 	}
 )
 
@@ -20,7 +21,7 @@ var (
 
 func TicketHome() ITicketHome {
 	if localTicketHome == nil {
-		panic("implement ...")
+		panic("implement localTicketHome not found for interface ITicketHome")
 	}
 
 	return localTicketHome
@@ -32,7 +33,7 @@ func InitTicketHome(i ITicketHome) {
 
 func TicketItem() ITicketItem {
 	if localTicketItem == nil {
-		panic("implement ...")
+		panic("implement localTicketItem not found for interface ITicketItem")
 	}
 
 	return localTicketItem

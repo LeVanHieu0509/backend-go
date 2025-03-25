@@ -27,6 +27,8 @@
 22. go get github.com/prometheus/client_golang/prometheus/promhttp
 23. air = nodemon :go install github.com/air-verse/air@latest
 
+24. go get github.com/dgraph-io/ristretto/v2
+
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 
 run server: go run cmd/server/main.go
@@ -119,3 +121,16 @@ gRPC: Là giao thức truyền thông đồng bộ, nghĩa là client và server
 4. Sqlc sẽ combind ra code của goose: make sqlgen
 
 5. Nếu thêm 1 column thì cần phải tạo ra 1 migration
+
+### Redis Local cache - Restrito
+
+1. 1 nốt đơn redis với công ty nhỏ và vừa
+2. Local cache nằm trong server của chúng ta, nó sẽ nằm trong chính từng server và lưu data lại trong server của mình.
+3. Lưu trong ứng dụng để tăng tốc ứng dụng lấy data.
+4. Nhược điểm:
+
+- Dung lượng ít, lưu trong 1 ứng dụng duy nhất, nếu server bị reboot thì sẽ bị mất hết data
+
+### Redis Distribute Cache
+
+1. Redis sentinel có 3 con server, master và slave 1, slave 2 -> không sợ miss data -> 30k request/s

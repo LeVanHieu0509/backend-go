@@ -10,3 +10,11 @@
 1. Để expired
 2. Gia hạn cache theo cronjob vào lúc 12g đêm
 3. Thêm khóa mutex (chỉ 1 thằng lọt vô để lấy csdl để lưu data vào cache => 5999 request còn lại chờ để lấy cache) - đặt cặp key và value
+
+### GO SENIOR (03) : REDIS Solutions: Standalone vs Sentinel vs Cluster
+
+- Mysql chỉ chịu đựng được 3k request/s => redis sẽ gánh được request -> lưu trên memory
+- Nếu sử dụng redis sentinal thì trên 3 con redis sẽ chỉ làm 1 nhiệm vụ duy nhất ĐỌC hoặc GHI
+-
+
+sử dụng: wrk -t12 -c1000 -d30s http://localhost:8001/v1/2024/ticket/item/1
