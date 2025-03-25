@@ -2,9 +2,14 @@ package main
 
 import "fmt"
 
+type student struct {
+	name string
+	age  int
+}
 type person struct {
 	name string
 	age  int
+	student
 }
 
 func newPerson(name string) *person {
@@ -14,9 +19,13 @@ func newPerson(name string) *person {
 	return &p
 }
 
+func updatePerson(p *person, age int) {
+	p.age = age
+}
+
 func main() {
 
-	fmt.Println(person{"Bob", 20})
+	fmt.Println(person{"Bob", 20, student{"Alice", 20}})
 
 	fmt.Println(person{name: "Alice", age: 30})
 
@@ -26,7 +35,7 @@ func main() {
 
 	fmt.Println(newPerson("Jon"))
 
-	s := person{name: "Sean", age: 50}
+	s := person{name: "Sean", age: 50, student: student{"Alice", 20}}
 	fmt.Println(s.name)
 
 	sp := &s
@@ -43,4 +52,7 @@ func main() {
 		true,
 	}
 	fmt.Println(dog)
+
+	updatePerson(&s, 23)
+	fmt.Println(sp.student.age)
 }
