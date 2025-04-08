@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/LeVanHieu0509/backend-go/global"
@@ -31,6 +32,11 @@ func NewTicketItemImpl(r *database.Queries, redisCache service.IRedisCache, loca
 	}
 }
 
+// nếu như 17k request liên tục thì sẽ có 700 request chọt vô database để mà đọc
+// cần sử dụng mutex để lock lại khi mà có nhiều request cùng 1 lúc
+
+var mu sync.Mutex
+
 func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out model.TicketItemsOutput, err error) {
 
 	// get data dfrom database
@@ -54,8 +60,15 @@ func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out 
 	if err != nil {
 		return out, fmt.Errorf("%w with id = %d -> err: %w", response.CouldNotGetTicketErr, ticketId, err)
 	}
+	// chỉ lock được trên mono redis
+	mu.Lock()
+	defer mu.Unlock()
+
+	// sử dụng khoá phân tán để có thể khoá tài nguyên lại -> 3 server có truy cập thì cũng chỉ 1 server được vào.
 
 	if (out != model.TicketItemsOutput{}) {
+		global.Logger.Info("12 - RESPONSE TICKET ITEM LOCAL CACHE +++")
+
 		fmt.Println("12 - RESPONSE TICKET ITEM LOCAL CACHE -> CHECK DATA TICKET WITH ID -> ", ticketId)
 		return out, nil
 	}
@@ -66,6 +79,8 @@ func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out 
 	}
 
 	if (out != model.TicketItemsOutput{}) {
+		global.Logger.Info("13 - RESPONSE TICKET ITEM DISTRIBUTED CACHE +++")
+
 		fmt.Println("13 - RESPONSE TICKET ITEM DISTRIBUTED CACHE -> CHECK DATA TICKET WITH ID -> ", ticketId)
 		return out, nil
 	}
@@ -75,6 +90,8 @@ func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out 
 	if err != nil {
 		return out, fmt.Errorf("%w with id = %d -> err: %w", response.CouldNotGetTicketErr, ticketId, err)
 	}
+
+	global.Logger.Info("11 -RESPONSE TICKET ITEM MYSQL +++")
 	fmt.Println("11 -RESPONSE TICKET ITEM MYSQL -> CHECK DATA TICKET WITH ID -> ", ticketId)
 	return out, nil
 }
@@ -169,12 +186,12 @@ func (s *sTicketItem) getTicketItemFromLocalCache(ctx context.Context, ticketId 
 		return out, nil
 	}
 	// fmt.Println(">>>", ticketItemLocalCache)
-	// fmt.Printf(">>> Value: %+v, Type: %s\n", ticketItemLocalCache, reflect.TypeOf(ticketItemLocalCache))
 
 	fmt.Println("03 - LOCAL CACHE: FOUND -> CHECK DATA TICKET WITH ID -> ", ticketId)
 
 	// // Type Assertion to string
 	jsonTicketString, ok := ticketItemLocalCache.(string)
+
 	if !ok {
 		fmt.Printf("ERROR: Local cache item with key %d is not a string\n", ticketId)
 	}

@@ -2,8 +2,8 @@ package model
 
 // Get ticketItems returns
 type TicketItemsOutput struct {
-	TicketId       int    `json:"ticket_Id"`
-	TicketName     string `json:"ticket_Name"`
-	StockAvailable int    `json:"stock_Available"`
-	StockInitial   int    `json:"stock_Initial"`
+	TicketId       int    `json:"id"`
+	TicketName     string `json:"name"`
+	StockAvailable int    `json:"stock_available"`
+	StockInitial   int    `json:"stock_initial"`
 }
