@@ -7,15 +7,17 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/bsm/redislock"
 	"github.com/redis/go-redis/v9"
 )
 
 type sRedisCache struct {
 	client *redis.Client // Chỉ cần client, không cần redsync.
+	locker *redislock.Client
 }
 
 func NewRedisCache(client *redis.Client) *sRedisCache {
-	return &sRedisCache{client: client}
+	return &sRedisCache{client: client, locker: redislock.New(client)}
 }
 
 func (s *sRedisCache) Get(ctx context.Context, key string) (string, error) {
@@ -71,4 +73,23 @@ func (s *sRedisCache) Exists(ctx context.Context, key string) (bool, error) {
 		return false, fmt.Errorf("redis exists error: %w", err)
 	}
 	return val == 1, nil
+}
+
+func (s *sRedisCache) WithDistributedLock(ctx context.Context, key string, ttlSeconds int, fn func(ctx context.Context) error) error {
+	fmt.Println("WithDistributedLock ")
+
+	lockTTL := time.Duration(ttlSeconds) * time.Second
+
+	lock, err := s.locker.Obtain(ctx, key, lockTTL, nil)
+
+	if err == redislock.ErrNotObtained {
+		return fmt.Errorf("Could not obtain lock for key: %s", key)
+	} else if err != nil {
+		return fmt.Errorf("Failed to obtain lock %w", err)
+	}
+
+	// Nếu bị crash thì vẫn release được
+	defer lock.Release(ctx)
+
+	return fn(ctx)
 }

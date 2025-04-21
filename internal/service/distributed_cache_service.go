@@ -11,4 +11,6 @@ type IRedisCache interface {
 	Incr(ctx context.Context, key string) (int64, error)
 	Decr(ctx context.Context, key string) (int64, error)
 	Exists(ctx context.Context, key string) (bool, error)
+
+	WithDistributedLock(ctx context.Context, key string, ttlSeconds int, fn func(ctx context.Context) error) error
 }

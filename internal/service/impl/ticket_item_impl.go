@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/LeVanHieu0509/backend-go/global"
@@ -15,6 +14,7 @@ import (
 	"github.com/LeVanHieu0509/backend-go/internal/model/mapper"
 	"github.com/LeVanHieu0509/backend-go/internal/service"
 	"github.com/LeVanHieu0509/backend-go/pkg/response"
+	"go.uber.org/zap"
 )
 
 type sTicketItem struct {
@@ -35,7 +35,7 @@ func NewTicketItemImpl(r *database.Queries, redisCache service.IRedisCache, loca
 // nếu như 17k request liên tục thì sẽ có 700 request chọt vô database để mà đọc
 // cần sử dụng mutex để lock lại khi mà có nhiều request cùng 1 lúc
 
-var mu sync.Mutex
+// var mu sync.Mutex
 
 func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out model.TicketItemsOutput, err error) {
 
@@ -61,8 +61,8 @@ func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out 
 		return out, fmt.Errorf("%w with id = %d -> err: %w", response.CouldNotGetTicketErr, ticketId, err)
 	}
 	// chỉ lock được trên mono redis
-	mu.Lock()
-	defer mu.Unlock()
+	// mu.Lock()
+	// defer mu.Unlock()
 
 	// sử dụng khoá phân tán để có thể khoá tài nguyên lại -> 3 server có truy cập thì cũng chỉ 1 server được vào.
 
@@ -86,7 +86,9 @@ func (s *sTicketItem) GetTicketItemById(ctx context.Context, ticketId int) (out 
 	}
 
 	//2. Nếu trong distribute cache không có data thì mới query vào database để get data
-	out, err = s.getTicketItemFromDatabase(ctx, ticketId)
+	// out, err = s.getTicketItemFromDatabase(ctx, ticketId)
+	out, err = s.getTicketItemFromDatabaseLock(ctx, ticketId)
+
 	if err != nil {
 		return out, fmt.Errorf("%w with id = %d -> err: %w", response.CouldNotGetTicketErr, ticketId, err)
 	}
@@ -201,6 +203,46 @@ func (s *sTicketItem) getTicketItemFromLocalCache(ctx context.Context, ticketId 
 	}
 
 	return out, nil
+}
+
+func (s *sTicketItem) getTicketItemFromDatabaseLock(ctx context.Context, ticketId int) (out model.TicketItemsOutput, err error) {
+	fmt.Println("07 - QUERY DATABASE -> CHECK DATA TICKET WITH ID -> ", ticketId)
+
+	lockKey := "lock:ticketItem" + strconv.Itoa(ticketId)
+
+	err = s.distributedCache.WithDistributedLock(ctx, lockKey, 5, func(ctx context.Context) error {
+		global.Logger.Info("LOCK ACQUIRED -> QUERY DATABASE ->", zap.Any("TicketID", ticketId))
+
+		ticketItem, err := s.r.GetTicketItemById(ctx, int64(ticketId))
+
+		if err != nil {
+			return err
+		}
+
+		ticketItemCacheJSON, err := json.Marshal(ticketItem)
+
+		if err != nil {
+			return fmt.Errorf("marshal json failed: %w", err)
+		}
+
+		err = global.Rdb.Set(ctx, s.getKeyTicketItemCache(ticketId), ticketItemCacheJSON, time.Duration(consts.TIME_2FA_OTP_REGISTER)*time.Minute).Err()
+
+		if err != nil {
+			return fmt.Errorf("Save redis failed: %w", err)
+		}
+
+		isSuccess := s.localCache.SetWithTTL(ctx, s.getKeyTicketItemCache(ticketId), ticketItem)
+
+		if !isSuccess {
+			return fmt.Errorf("Save local cache failed")
+		}
+
+		out = mapper.ToTicketItemDTO(ticketItem)
+
+		return nil
+	})
+
+	return
 }
 
 // util

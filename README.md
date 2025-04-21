@@ -28,6 +28,7 @@
 23. air = nodemon :go install github.com/air-verse/air@latest
 
 24. go get github.com/dgraph-io/ristretto/v2
+25. go get -u github.com/bsm/redislock
 
 ## Go (3): GIN vs ROUTER --------------------------------------------------------------------------------------------------------------------
 
